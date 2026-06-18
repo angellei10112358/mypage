@@ -208,7 +208,7 @@ body::before {
 
 .img-overlay-text {
     position: absolute;
-    top: 8px;
+    top: 4px;
     left: 0;
     right: 0;
     font-weight: 700;
