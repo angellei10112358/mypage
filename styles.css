@@ -238,15 +238,46 @@ body::before {
 }
 
 .pub-list li {
-    padding: 14px 18px;
+    padding: 0;
     background: #f1f5f9;
     border-radius: 8px;
+}
+
+.pub-text {
+    padding: 14px 18px 6px;
     font-size: 0.9rem;
     line-height: 1.5;
 }
 
-.pub-list li strong {
+.pub-text strong {
     color: #0f172a;
+}
+
+.pub-text.collapsed {
+    overflow: hidden;
+}
+
+.see-more-btn {
+    display: none;
+    width: 100%;
+    border: none;
+    background: none;
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0 18px 10px;
+    text-align: left;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+}
+
+.see-more-btn.visible {
+    display: block;
+}
+
+.see-more-btn:hover {
+    color: #0284c7;
 }
 
 /* ─── Telescope Time ─── */
@@ -304,7 +335,7 @@ body::before {
     transform: translateY(-50%);
     font-size: 1rem;
     color: #94a3b8;
-    opacity: 0;
+    opacity: 0.5;
     transition: opacity 0.25s ease, transform 0.25s ease;
     line-height: 1;
 }

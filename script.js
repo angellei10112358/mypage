@@ -166,4 +166,37 @@
         URL.revokeObjectURL(url);
     }
 
+    /* ─── Publications see more ─── */
+
+    function initSeeMore() {
+        var items = document.querySelectorAll('.pub-list li');
+        items.forEach(function (li) {
+            var text = li.querySelector('.pub-text');
+            var btn = li.querySelector('.see-more-btn');
+            if (!text || !btn) return;
+
+            btn.classList.remove('visible');
+
+            var lh = parseFloat(getComputedStyle(text).lineHeight);
+            if (isNaN(lh)) {
+                lh = parseFloat(getComputedStyle(text).fontSize) * 1.5;
+            }
+
+            var twoLinePx = lh * 2;
+
+            if (text.scrollHeight > twoLinePx + 2) {
+                text.style.maxHeight = twoLinePx + 'px';
+                text.classList.add('collapsed');
+                btn.classList.add('visible');
+                btn.addEventListener('click', function () {
+                    text.style.maxHeight = '';
+                    text.classList.remove('collapsed');
+                    btn.classList.remove('visible');
+                });
+            }
+        });
+    }
+
+    initSeeMore();
+
 })();
