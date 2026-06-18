@@ -591,10 +591,11 @@ body::before {
     }
 
     .scroll-container {
-        scroll-snap-type: y proximity;
+        scroll-snap-type: none;
     }
 
     .section {
+        scroll-snap-align: none;
         min-height: 100vh;
         height: auto;
         align-items: flex-start;
