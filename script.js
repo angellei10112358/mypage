@@ -48,6 +48,7 @@
             if (ratio > 0.97 || ratio < 0.03) {
                 page.style.transform = '';
                 page.style.opacity = '';
+                page.style.transformOrigin = '';
                 return;
             }
 
@@ -55,19 +56,24 @@
             var isOutgoing = center < vh / 2;
             var progress = 1 - ratio;
 
-            var rotate, translateY, opacity;
+            var rotate, translateY, opacity, scale, origin;
 
             if (isOutgoing) {
-                rotate = progress * (-22);
-                translateY = progress * (-50);
-                opacity = 1 - progress * 0.6;
+                origin = 'center bottom';
+                rotate = progress * (-35);
+                translateY = progress * (-100);
+                opacity = 1 - progress * 0.85;
+                scale = 1 - progress * 0.035;
             } else {
-                rotate = progress * 18;
-                translateY = progress * 55;
-                opacity = 0.55 + ratio * 0.45;
+                origin = 'center bottom';
+                rotate = progress * 28;
+                translateY = progress * 90;
+                opacity = 0.2 + ratio * 0.8;
+                scale = 0.965 + progress * 0.035;
             }
 
-            page.style.transform = 'rotateX(' + rotate + 'deg) translateY(' + translateY + 'px)';
+            page.style.transformOrigin = origin;
+            page.style.transform = 'rotateX(' + rotate + 'deg) translateY(' + translateY + 'px) scale(' + scale + ')';
             page.style.opacity = opacity;
         });
     }
