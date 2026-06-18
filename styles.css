@@ -84,13 +84,36 @@ body::before {
     justify-content: center;
     padding: 70px 24px 40px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
 }
 
-.section:nth-child(even) {
-    background: rgba(255, 255, 255, 0.35);
+/* blurred background layer — fixed to viewport, clipped by overflow:hidden */
+.section::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background: url('bg.png') center / cover no-repeat;
+    filter: blur(14px);
+    pointer-events: none;
+}
+
+/* white tint overlay */
+.section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+}
+
+.section:nth-child(even)::after {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* ─── Page-Flip Inner ─── */
@@ -104,10 +127,11 @@ body::before {
     transform-style: preserve-3d;
     backface-visibility: hidden;
     will-change: transform, opacity;
-    background: inherit;
     border-radius: inherit;
     padding: inherit;
     perspective: 800px;
+    position: relative;
+    z-index: 1;
 }
 
 .section-content {
