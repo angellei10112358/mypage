@@ -31,7 +31,6 @@
 
     function applyPageFlip() {
         if (editMode) return;
-        if (window.innerWidth < 768) return;
 
         var vh = container.clientHeight;
 
