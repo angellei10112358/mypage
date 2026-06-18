@@ -166,37 +166,4 @@
         URL.revokeObjectURL(url);
     }
 
-    /* ─── Publications "see more" ─── */
-
-    function initSeeMore() {
-        var items = document.querySelectorAll('.pub-list li');
-        items.forEach(function (li) {
-            var text = li.querySelector('.pub-text');
-            var btn = li.querySelector('.see-more-btn');
-            if (!text || !btn) return;
-
-            var fs = parseFloat(getComputedStyle(text).fontSize);
-            if (isNaN(fs)) fs = 14.4;
-            var lh = parseFloat(getComputedStyle(text).lineHeight);
-            if (isNaN(lh)) lh = fs * 1.5;
-
-            var twoLinePx = lh * 2;
-
-            if (text.scrollHeight > twoLinePx + 4) {
-                text.style.maxHeight = twoLinePx + 'px';
-                text.classList.add('collapsed');
-                btn.removeAttribute('hidden');
-                btn.textContent = '\u2026 see more';
-                btn.addEventListener('click', function () {
-                    text.style.maxHeight = '';
-                    text.classList.remove('collapsed');
-                    btn.setAttribute('hidden', '');
-                });
-            } else {
-                btn.setAttribute('hidden', '');
-            }
-        });
-    }
-
-    initSeeMore();
 })();
