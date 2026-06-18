@@ -300,6 +300,7 @@ body::before {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .pub-text {
@@ -349,14 +350,14 @@ body::before {
     right: 14px;
 }
 
-.pub-text[data-href]:hover {
-    background: rgba(255, 255, 255, 0.8);
+.pub-list li:has(.pub-text[data-href]):hover {
     transform: scale(1.04);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.8);
 }
 
-.pub-text[data-href]:hover::before,
-.pub-text[data-href]:hover::after {
+.pub-list li:has(.pub-text[data-href]):hover .pub-text[data-href]::before,
+.pub-list li:has(.pub-text[data-href]):hover .pub-text[data-href]::after {
     opacity: 1;
 }
 
