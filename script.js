@@ -188,12 +188,19 @@
             var desc = li.querySelector('.pub-desc');
             if (!desc) return;
 
-            if ((desc.textContent || desc.innerText || '').length > 200) {
-                var lh = 21;
-                desc.style.maxHeight = lh * 2 + 'px';
-                desc.style.overflow = 'hidden';
-                desc.style.transition = 'max-height 0.3s ease';
+            var lh = Math.round(parseFloat(getComputedStyle(desc).lineHeight));
+            if (!lh || lh <= 0) {
+                lh = Math.round(parseFloat(getComputedStyle(desc).fontSize) * 1.5);
+            }
+            lh = Math.max(lh, 15);
+            var twoLines = lh * 2;
 
+            desc.style.overflow = 'hidden';
+            desc.style.maxHeight = twoLines + 'px';
+            desc.style.transition = 'max-height 0.3s ease';
+            void desc.offsetHeight;
+
+            if (desc.scrollHeight > desc.clientHeight + 1) {
                 var btn = document.createElement('button');
                 btn.className = 'see-more-btn visible';
                 btn.textContent = '... see more';
@@ -204,10 +211,14 @@
                         desc.style.maxHeight = 'none';
                         btn.textContent = 'see less';
                     } else {
-                        desc.style.maxHeight = lh * 2 + 'px';
+                        desc.style.maxHeight = twoLines + 'px';
                         btn.textContent = '... see more';
                     }
                 });
+            } else {
+                desc.style.maxHeight = '';
+                desc.style.overflow = '';
+                desc.style.transition = '';
             }
         });
     }
