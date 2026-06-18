@@ -59,17 +59,17 @@
             var rotate, translateY, opacity, scale, origin;
 
             if (isOutgoing) {
-                origin = 'center bottom';
-                rotate = progress * (-35);
-                translateY = progress * (-100);
-                opacity = 1 - progress * 0.85;
-                scale = 1 - progress * 0.035;
+                origin = 'center';
+                rotate = progress * (-10);
+                translateY = progress * (-180);
+                opacity = 1 - progress;
+                scale = 1 - progress * 0.04;
             } else {
-                origin = 'center bottom';
-                rotate = progress * 28;
-                translateY = progress * 90;
-                opacity = 0.2 + ratio * 0.8;
-                scale = 0.965 + progress * 0.035;
+                origin = 'center';
+                rotate = 0;
+                translateY = (1 - ratio) * 120;
+                opacity = 0.15 + ratio * 0.85;
+                scale = 0.96 + progress * 0.04;
             }
 
             page.style.transformOrigin = origin;
