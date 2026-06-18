@@ -241,14 +241,12 @@ body::before {
     padding: 0;
     background: #f1f5f9;
     border-radius: 8px;
-    overflow: hidden;
 }
 
 .pub-text {
     padding: 14px 18px;
     font-size: 0.9rem;
     line-height: 1.5;
-    overflow: hidden;
 }
 
 .pub-text strong {
@@ -256,7 +254,8 @@ body::before {
 }
 
 .pub-text.collapsed {
-    max-height: calc(1.5em * 2);
+    max-height: 3em;
+    overflow: hidden;
 }
 
 .see-more-btn {

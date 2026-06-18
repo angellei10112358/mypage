@@ -175,24 +175,25 @@
             var btn = li.querySelector('.see-more-btn');
             if (!text || !btn) return;
 
-            btn.hidden = true;
+            var fs = parseFloat(getComputedStyle(text).fontSize);
+            if (isNaN(fs)) fs = 14.4;
+            var lh = parseFloat(getComputedStyle(text).lineHeight);
+            if (isNaN(lh)) lh = fs * 1.5;
 
-            var lineHeight = parseFloat(getComputedStyle(text).lineHeight);
-            if (isNaN(lineHeight)) {
-                var fs = parseFloat(getComputedStyle(text).fontSize);
-                lineHeight = fs * 1.5;
-            }
+            var twoLinePx = lh * 2;
 
-            var twoLineHeight = lineHeight * 2 + 2;
-
-            if (text.scrollHeight > twoLineHeight) {
+            if (text.scrollHeight > twoLinePx + 4) {
+                text.style.maxHeight = twoLinePx + 'px';
                 text.classList.add('collapsed');
-                btn.hidden = false;
+                btn.removeAttribute('hidden');
                 btn.textContent = '\u2026 see more';
                 btn.addEventListener('click', function () {
+                    text.style.maxHeight = '';
                     text.classList.remove('collapsed');
-                    btn.hidden = true;
+                    btn.setAttribute('hidden', '');
                 });
+            } else {
+                btn.setAttribute('hidden', '');
             }
         });
     }
