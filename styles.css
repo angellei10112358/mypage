@@ -208,7 +208,7 @@ body::before {
 
 .img-overlay-text {
     position: absolute;
-    bottom: 100%;
+    top: 8px;
     left: 0;
     right: 0;
     font-weight: 700;
@@ -220,7 +220,7 @@ body::before {
     transition: opacity 0.4s ease;
     pointer-events: none;
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    padding-bottom: 4px;
+    z-index: 2;
 }
 
 .profile-img:hover .img-overlay-text {
