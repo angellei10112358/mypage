@@ -12,8 +12,16 @@ html {
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #334155;
-    background: url('bg.png') center / cover no-repeat fixed;
+    background: #f8fafc;
     line-height: 1.6;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: url('bg.png') center / cover no-repeat;
 }
 
 /* ─── Fixed Navbar ─── */
@@ -24,7 +32,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -64,7 +72,6 @@ body {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    perspective: 1000px;
 }
 
 /* ─── Sections ─── */
@@ -77,13 +84,13 @@ body {
     justify-content: center;
     padding: 70px 24px 40px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
 
 .section:nth-child(even) {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.35);
 }
 
 /* ─── Page-Flip Inner ─── */
