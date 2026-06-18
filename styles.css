@@ -206,6 +206,26 @@ body::before {
     opacity: 1;
 }
 
+.img-overlay-text {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    font-weight: 700;
+    font-style: italic;
+    color: #dc2626;
+    font-size: 0.85rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.profile-img:hover .img-overlay-text {
+    opacity: 1;
+}
+
 /* ─── Skills ─── */
 
 .skill-list {
