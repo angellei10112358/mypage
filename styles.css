@@ -24,18 +24,20 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: #0f172a;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 0;
     padding: 0 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .nav-link {
-    color: #94a3b8;
+    color: #475569;
     text-decoration: none;
     font-size: 0.8rem;
     font-weight: 500;
@@ -47,12 +49,12 @@ body {
 }
 
 .nav-link:hover {
-    color: #e2e8f0;
+    color: #0f172a;
 }
 
 .nav-link.active {
-    color: #38bdf8;
-    border-bottom-color: #38bdf8;
+    color: #0284c7;
+    border-bottom-color: #0284c7;
 }
 
 /* ─── Scroll Container ─── */
@@ -75,11 +77,13 @@ body {
     justify-content: center;
     padding: 70px 24px 40px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .section:nth-child(even) {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 /* ─── Page-Flip Inner ─── */
