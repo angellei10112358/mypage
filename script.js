@@ -165,4 +165,37 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
+
+    /* ─── Publications "see more" ─── */
+
+    function initSeeMore() {
+        var items = document.querySelectorAll('.pub-list li');
+        items.forEach(function (li) {
+            var text = li.querySelector('.pub-text');
+            var btn = li.querySelector('.see-more-btn');
+            if (!text || !btn) return;
+
+            btn.hidden = true;
+
+            var lineHeight = parseFloat(getComputedStyle(text).lineHeight);
+            if (isNaN(lineHeight)) {
+                var fs = parseFloat(getComputedStyle(text).fontSize);
+                lineHeight = fs * 1.5;
+            }
+
+            var twoLineHeight = lineHeight * 2 + 2;
+
+            if (text.scrollHeight > twoLineHeight) {
+                text.classList.add('collapsed');
+                btn.hidden = false;
+                btn.textContent = '\u2026 see more';
+                btn.addEventListener('click', function () {
+                    text.classList.remove('collapsed');
+                    btn.hidden = true;
+                });
+            }
+        });
+    }
+
+    initSeeMore();
 })();
