@@ -572,6 +572,20 @@ body::before {
         width: 150px;
         height: 190px;
     }
+
+    .section {
+        min-height: 100vh;
+        height: auto;
+        align-items: flex-start;
+        padding: 70px 16px 40px;
+    }
+
+    .section-page {
+        height: auto;
+        min-height: 100%;
+        align-items: flex-start;
+        padding-top: 20px;
+    }
 }
 
 /* ─── Edit Mode ─── */
