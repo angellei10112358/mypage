@@ -56,41 +56,20 @@
             var isOutgoing = center < vh / 2;
             var progress = 1 - ratio;
 
-            var rotate, translateY, opacity, scale, origin;
-            var isPub = sec.id === 'publications';
+            var translateY, opacity, scale;
 
-            if (isPub) {
-                if (isOutgoing) {
-                    origin = 'center';
-                    rotate = progress * (-10);
-                    translateY = progress * (-180);
-                    opacity = 1 - progress;
-                    scale = 1 - progress * 0.04;
-                } else {
-                    origin = 'center';
-                    rotate = 0;
-                    translateY = (1 - ratio) * 120;
-                    opacity = 0.15 + ratio * 0.85;
-                    scale = 0.96 + progress * 0.04;
-                }
+            if (isOutgoing) {
+                translateY = progress * (-180);
+                opacity = 1 - progress;
+                scale = 1 - progress * 0.04;
             } else {
-                if (isOutgoing) {
-                    origin = 'center bottom';
-                    rotate = progress * (-25);
-                    translateY = progress * (-80);
-                    opacity = 1 - progress * 0.75;
-                    scale = 1 - progress * 0.03;
-                } else {
-                    origin = 'center bottom';
-                    rotate = progress * 20;
-                    translateY = progress * 70;
-                    opacity = 0.25 + ratio * 0.75;
-                    scale = 0.97 + progress * 0.03;
-                }
+                translateY = (1 - ratio) * 120;
+                opacity = 0.15 + ratio * 0.85;
+                scale = 0.96 + progress * 0.04;
             }
 
-            page.style.transformOrigin = origin;
-            page.style.transform = 'rotateX(' + rotate + 'deg) translateY(' + translateY + 'px) scale(' + scale + ')';
+            page.style.transformOrigin = 'center';
+            page.style.transform = 'translateY(' + translateY + 'px) scale(' + scale + ')';
             page.style.opacity = opacity;
         });
     }
