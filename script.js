@@ -172,37 +172,46 @@
         URL.revokeObjectURL(url);
     }
 
+    /* ─── Publications: clickable cards ─── */
+
+    document.querySelectorAll('.pub-text[data-href]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            window.open(el.getAttribute('data-href'), '_blank');
+        });
+    });
+
     /* ─── Publications see more / see less ─── */
 
     function initSeeMore() {
         var items = document.querySelectorAll('.pub-list li');
         items.forEach(function (li) {
             var desc = li.querySelector('.pub-desc');
-            var btn = li.querySelector('.see-more-btn');
-            if (!desc || !btn) return;
+            if (!desc) return;
+            var lh = parseFloat(getComputedStyle(desc).lineHeight);
+            if (!lh || lh <= 0) {
+                lh = parseFloat(getComputedStyle(desc).fontSize) * 1.5;
+            }
+            if (!lh || lh <= 0) return;
+            if (desc.scrollHeight > lh * 2 + 2) {
+                desc.style.maxHeight = lh * 2 + 'px';
+                desc.style.overflow = 'hidden';
+                desc.style.transition = 'max-height 0.3s ease';
 
-            btn.classList.remove('visible');
-            desc.classList.remove('collapsed');
+                var btn = document.createElement('button');
+                btn.className = 'see-more-btn';
+                btn.textContent = '... see more';
+                li.appendChild(btn);
 
-            setTimeout(function () {
-                var lh = parseFloat(getComputedStyle(desc).lineHeight);
-                if (!lh || lh <= 0) {
-                    lh = parseFloat(getComputedStyle(desc).fontSize) * 1.5;
-                }
-                if (desc.scrollHeight > lh * 2 + 2) {
-                    desc.classList.add('collapsed');
-                    btn.classList.add('visible');
-                    btn.addEventListener('click', function () {
-                        if (desc.classList.contains('collapsed')) {
-                            desc.classList.remove('collapsed');
-                            btn.textContent = 'see less';
-                        } else {
-                            desc.classList.add('collapsed');
-                            btn.textContent = '... see more';
-                        }
-                    });
-                }
-            }, 50);
+                btn.addEventListener('click', function () {
+                    if (desc.style.maxHeight !== 'none' && desc.style.maxHeight !== '') {
+                        desc.style.maxHeight = 'none';
+                        btn.textContent = 'see less';
+                    } else {
+                        desc.style.maxHeight = lh * 2 + 'px';
+                        btn.textContent = '... see more';
+                    }
+                });
+            }
         });
     }
 
