@@ -154,18 +154,19 @@ body::before {
 
 .info-grid {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 10px 24px;
-}
-
-.info-grid .label {
-    font-weight: 600;
-    color: #64748b;
-    white-space: nowrap;
-}
-
-.info-grid .value {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    font-size: 0.95rem;
     color: #1e293b;
+}
+
+.info-grid a {
+    color: #0284c7;
+    text-decoration: none;
+}
+
+.info-grid a:hover {
+    text-decoration: underline;
 }
 
 /* ─── Skills ─── */
