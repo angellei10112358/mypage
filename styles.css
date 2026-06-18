@@ -362,6 +362,20 @@ body::before {
     opacity: 1;
 }
 
+.more-coming {
+    margin-top: 20px;
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 1rem;
+    color: #64748b;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 8px;
+    border: 1px dashed rgba(100, 116, 139, 0.3);
+    letter-spacing: 0.04em;
+}
+
 .see-more-btn {
     display: none;
     width: 100%;
@@ -596,9 +610,12 @@ body::before {
     }
 
     .section-page {
+        align-items: flex-start;
+    }
+
+    #publications .section-page {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        align-items: flex-start;
     }
 }
 
