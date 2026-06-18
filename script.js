@@ -176,27 +176,22 @@
             if (!text || !btn) return;
 
             btn.classList.remove('visible');
-            text.style.maxHeight = '';
             text.classList.remove('collapsed');
 
-            requestAnimationFrame(function () {
+            setTimeout(function () {
                 var lh = parseFloat(getComputedStyle(text).lineHeight);
                 if (!lh || lh <= 0) {
                     lh = parseFloat(getComputedStyle(text).fontSize) * 1.5;
                 }
-                var twoLinePx = lh * 2;
-
-                if (text.scrollHeight > twoLinePx + 2) {
-                    text.style.maxHeight = twoLinePx + 'px';
+                if (text.scrollHeight > lh * 2 + 2) {
                     text.classList.add('collapsed');
                     btn.classList.add('visible');
                     btn.addEventListener('click', function () {
-                        text.style.maxHeight = '';
                         text.classList.remove('collapsed');
                         btn.classList.remove('visible');
                     });
                 }
-            });
+            }, 50);
         });
     }
 
