@@ -4,6 +4,9 @@
     var navLinks = document.querySelectorAll('.nav-link');
     var container = document.querySelector('.scroll-container');
     var ticking = false;
+    var editMode = false;
+
+    /* ─── Nav Highlight ─── */
 
     function updateActive() {
         var scrollTop = container.scrollTop;
@@ -24,7 +27,11 @@
         });
     }
 
+    /* ─── Page Flip ─── */
+
     function applyPageFlip() {
+        if (editMode) return;
+
         var vh = container.clientHeight;
 
         sections.forEach(function (sec, i) {
@@ -82,6 +89,7 @@
     navLinks.forEach(function (link) {
         link.addEventListener('click', function (e) {
             e.preventDefault();
+            if (editMode) return;
             var targetId = link.getAttribute('href').substring(1);
             var target = document.getElementById(targetId);
             if (target) {
@@ -89,4 +97,72 @@
             }
         });
     });
+
+    /* ─── Konami Code → Edit Mode ─── */
+
+    var konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    var keyBuffer = [];
+
+    document.addEventListener('keydown', function (e) {
+        if (editMode) return;
+
+        keyBuffer.push(e.key);
+        if (keyBuffer.length > konamiCode.length) {
+            keyBuffer.shift();
+        }
+
+        if (keyBuffer.length === konamiCode.length && keyBuffer.every(function (k, i) { return k === konamiCode[i]; })) {
+            activateEditMode();
+        }
+    });
+
+    function activateEditMode() {
+        editMode = true;
+        document.body.classList.add('edit-mode');
+
+        var contents = document.querySelectorAll('.section-content');
+        contents.forEach(function (el) {
+            el.contentEditable = 'true';
+            el.classList.add('editable');
+        });
+
+        var bar = document.createElement('div');
+        bar.id = 'edit-bar';
+        bar.innerHTML = '<span class="edit-label">\u270F\uFE0F Edit Mode</span>';
+
+        var exportBtn = document.createElement('button');
+        exportBtn.id = 'export-btn';
+        exportBtn.textContent = 'Export';
+        bar.appendChild(exportBtn);
+
+        document.body.appendChild(bar);
+
+        exportBtn.addEventListener('click', exportContent);
+    }
+
+    /* ─── Export ─── */
+
+    function exportContent() {
+        var data = {};
+        document.querySelectorAll('.section').forEach(function (sec) {
+            var id = sec.id;
+            var contentEl = sec.querySelector('.section-content');
+            if (contentEl) {
+                data[id] = contentEl.innerHTML;
+            }
+        });
+
+        data['_meta'] = { exportedAt: new Date().toISOString() };
+
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'page-content.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 })();

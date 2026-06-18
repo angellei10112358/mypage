@@ -327,6 +327,63 @@ body {
     }
 }
 
+/* ─── Edit Mode ─── */
+
+.edit-mode .section-page {
+    transform: none !important;
+    opacity: 1 !important;
+}
+
+.edit-mode .section-content.editable {
+    outline: 2px dashed #38bdf8;
+    outline-offset: 6px;
+    border-radius: 6px;
+    padding: 16px;
+    cursor: text;
+    transition: outline-color 0.3s;
+}
+
+.edit-mode .section-content.editable:focus {
+    outline-color: #0284c7;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+}
+
+#edit-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+    background: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.edit-label {
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+#export-btn {
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    padding: 8px 22px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#export-btn:hover {
+    background: #7dd3fc;
+}
+
 @media (max-width: 480px) {
     .nav-link {
         font-size: 0.6rem;
@@ -344,5 +401,18 @@ body {
 
     .info-grid .label {
         margin-bottom: -4px;
+    }
+
+    #edit-bar {
+        padding: 8px 12px;
+    }
+
+    .edit-label {
+        font-size: 0.75rem;
+    }
+
+    #export-btn {
+        padding: 6px 14px;
+        font-size: 0.75rem;
     }
 }
