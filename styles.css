@@ -118,6 +118,7 @@ body::before {
     will-change: transform, opacity;
     border-radius: inherit;
     padding: inherit;
+    box-sizing: border-box;
     perspective: 800px;
     position: relative;
     z-index: 1;
@@ -590,23 +591,14 @@ body::before {
         height: 190px;
     }
 
-    .scroll-container {
-        scroll-snap-type: none;
-    }
-
     .section {
-        scroll-snap-align: none;
-        min-height: 100vh;
-        height: auto;
-        align-items: flex-start;
         padding: 70px 16px 40px;
     }
 
     .section-page {
-        height: auto;
-        min-height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         align-items: flex-start;
-        padding-top: 20px;
     }
 }
 
