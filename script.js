@@ -188,15 +188,25 @@
             var desc = li.querySelector('.pub-desc');
             if (!desc) return;
 
-            if (desc.scrollHeight > desc.clientHeight + 1) {
+            if ((desc.textContent || desc.innerText || '').length > 200) {
+                var lh = 21;
+                desc.style.maxHeight = lh * 2 + 'px';
+                desc.style.overflow = 'hidden';
+                desc.style.transition = 'max-height 0.3s ease';
+
                 var btn = document.createElement('button');
                 btn.className = 'see-more-btn visible';
                 btn.textContent = '... see more';
                 li.appendChild(btn);
 
                 btn.addEventListener('click', function () {
-                    desc.classList.toggle('expanded');
-                    btn.textContent = desc.classList.contains('expanded') ? 'see less' : '... see more';
+                    if (desc.style.maxHeight !== 'none') {
+                        desc.style.maxHeight = 'none';
+                        btn.textContent = 'see less';
+                    } else {
+                        desc.style.maxHeight = lh * 2 + 'px';
+                        btn.textContent = '... see more';
+                    }
                 });
             }
         });

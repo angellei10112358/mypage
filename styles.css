@@ -208,18 +208,19 @@ body::before {
 
 .img-overlay-text {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    bottom: 100%;
+    left: 0;
+    right: 0;
     font-weight: 700;
     font-style: italic;
     color: #dc2626;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     text-align: center;
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    padding-bottom: 4px;
 }
 
 .profile-img:hover .img-overlay-text {
@@ -316,13 +317,6 @@ body::before {
 .pub-desc {
     font-size: 0.9rem;
     line-height: 1.5;
-    max-height: 3em;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.pub-desc.expanded {
-    max-height: none;
 }
 
 .pub-text[data-href] {
