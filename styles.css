@@ -631,6 +631,40 @@ body::before {
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
 
+.edit-mode .skill-list li,
+.edit-mode .pub-list li,
+.edit-mode .tel-list li,
+.edit-mode .proj-list li,
+.edit-mode .award-list li,
+.edit-mode .timeline-item {
+    resize: both;
+    overflow: auto;
+    min-width: 100px;
+    min-height: 40px;
+}
+
+.edit-move-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 0 2px;
+    border: 1px solid #94a3b8;
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    line-height: 1;
+    font-weight: 700;
+    user-select: none;
+}
+
+.edit-move-btn:hover {
+    background: #e2e8f0;
+}
+
 #edit-bar {
     position: fixed;
     top: 0;

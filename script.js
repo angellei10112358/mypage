@@ -132,6 +132,10 @@
             el.classList.add('editable');
         });
 
+        document.querySelectorAll('.skill-list li, .pub-list li, .tel-list li, .proj-list li, .award-list li, .timeline-item').forEach(function (el) {
+            addReorderButtons(el);
+        });
+
         var bar = document.createElement('div');
         bar.id = 'edit-bar';
         bar.innerHTML = '<span class="edit-label">\u270F\uFE0F Edit Mode</span>';
@@ -144,6 +148,40 @@
         document.body.appendChild(bar);
 
         exportBtn.addEventListener('click', exportContent);
+    }
+
+    function addReorderButtons(el) {
+        var wrap = document.createElement('span');
+        wrap.className = 'edit-move-wrap';
+        wrap.style.cssText = 'display:block;margin-bottom:4px;';
+
+        var upBtn = document.createElement('button');
+        upBtn.className = 'edit-move-btn';
+        upBtn.innerHTML = '&#9650;';
+        upBtn.title = 'Move up';
+        upBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var prev = el.previousElementSibling;
+            if (prev && prev.closest) {
+                el.parentNode.insertBefore(el, prev);
+            }
+        });
+
+        var downBtn = document.createElement('button');
+        downBtn.className = 'edit-move-btn';
+        downBtn.innerHTML = '&#9660;';
+        downBtn.title = 'Move down';
+        downBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var next = el.nextElementSibling;
+            if (next && next.closest) {
+                el.parentNode.insertBefore(next, el);
+            }
+        });
+
+        wrap.appendChild(upBtn);
+        wrap.appendChild(downBtn);
+        el.insertBefore(wrap, el.firstChild);
     }
 
     /* ─── Export ─── */
