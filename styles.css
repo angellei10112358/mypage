@@ -296,11 +296,41 @@ body::before {
 .pub-desc {
     font-size: 0.9rem;
     line-height: 1.5;
+    max-height: 3em;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.pub-desc.expanded {
+    max-height: none;
 }
 
 .pub-text[data-href] {
     cursor: pointer;
+    position: relative;
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.pub-text[data-href]::before,
+.pub-text[data-href]::after {
+    content: '\00BB';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #64748b;
+    opacity: 0.7;
+    transition: opacity 0.25s ease;
+    line-height: 1;
+}
+
+.pub-text[data-href]::before {
+    left: 14px;
+    content: '\00AB';
+}
+
+.pub-text[data-href]::after {
+    right: 14px;
 }
 
 .pub-text[data-href]:hover {
@@ -309,8 +339,13 @@ body::before {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
+.pub-text[data-href]:hover::before,
+.pub-text[data-href]:hover::after {
+    opacity: 1;
+}
+
 .see-more-btn {
-    display: block;
+    display: none;
     width: 100%;
     border: none;
     background: none;
@@ -322,6 +357,10 @@ body::before {
     text-align: left;
     letter-spacing: 0.02em;
     transition: color 0.2s;
+}
+
+.see-more-btn.visible {
+    display: block;
 }
 
 .see-more-btn:hover {

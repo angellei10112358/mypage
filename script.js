@@ -183,33 +183,19 @@
     /* ─── Publications see more / see less ─── */
 
     function initSeeMore() {
-        var items = document.querySelectorAll('.pub-list li');
-        items.forEach(function (li) {
+        document.querySelectorAll('.pub-list li').forEach(function (li) {
             var desc = li.querySelector('.pub-desc');
             if (!desc) return;
-            var lh = parseFloat(getComputedStyle(desc).lineHeight);
-            if (!lh || lh <= 0) {
-                lh = parseFloat(getComputedStyle(desc).fontSize) * 1.5;
-            }
-            if (!lh || lh <= 0) return;
-            if (desc.scrollHeight > lh * 2 + 2) {
-                desc.style.maxHeight = lh * 2 + 'px';
-                desc.style.overflow = 'hidden';
-                desc.style.transition = 'max-height 0.3s ease';
 
+            if (desc.scrollHeight > desc.clientHeight + 1) {
                 var btn = document.createElement('button');
-                btn.className = 'see-more-btn';
+                btn.className = 'see-more-btn visible';
                 btn.textContent = '... see more';
                 li.appendChild(btn);
 
                 btn.addEventListener('click', function () {
-                    if (desc.style.maxHeight !== 'none' && desc.style.maxHeight !== '') {
-                        desc.style.maxHeight = 'none';
-                        btn.textContent = 'see less';
-                    } else {
-                        desc.style.maxHeight = lh * 2 + 'px';
-                        btn.textContent = '... see more';
-                    }
+                    desc.classList.toggle('expanded');
+                    btn.textContent = desc.classList.contains('expanded') ? 'see less' : '... see more';
                 });
             }
         });
