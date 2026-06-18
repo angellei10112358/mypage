@@ -249,7 +249,12 @@ body::before {
     color: #0f172a;
 }
 
-.pub-text.collapsed {
+.pub-desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.pub-desc.collapsed {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

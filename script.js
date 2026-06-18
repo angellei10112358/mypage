@@ -172,29 +172,34 @@
         URL.revokeObjectURL(url);
     }
 
-    /* ─── Publications see more ─── */
+    /* ─── Publications see more / see less ─── */
 
     function initSeeMore() {
         var items = document.querySelectorAll('.pub-list li');
         items.forEach(function (li) {
-            var text = li.querySelector('.pub-text');
+            var desc = li.querySelector('.pub-desc');
             var btn = li.querySelector('.see-more-btn');
-            if (!text || !btn) return;
+            if (!desc || !btn) return;
 
             btn.classList.remove('visible');
-            text.classList.remove('collapsed');
+            desc.classList.remove('collapsed');
 
             setTimeout(function () {
-                var lh = parseFloat(getComputedStyle(text).lineHeight);
+                var lh = parseFloat(getComputedStyle(desc).lineHeight);
                 if (!lh || lh <= 0) {
-                    lh = parseFloat(getComputedStyle(text).fontSize) * 1.5;
+                    lh = parseFloat(getComputedStyle(desc).fontSize) * 1.5;
                 }
-                if (text.scrollHeight > lh * 2 + 2) {
-                    text.classList.add('collapsed');
+                if (desc.scrollHeight > lh * 2 + 2) {
+                    desc.classList.add('collapsed');
                     btn.classList.add('visible');
                     btn.addEventListener('click', function () {
-                        text.classList.remove('collapsed');
-                        btn.classList.remove('visible');
+                        if (desc.classList.contains('collapsed')) {
+                            desc.classList.remove('collapsed');
+                            btn.textContent = 'see less';
+                        } else {
+                            desc.classList.add('collapsed');
+                            btn.textContent = '... see more';
+                        }
                     });
                 }
             }, 50);
