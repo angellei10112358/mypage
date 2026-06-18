@@ -180,7 +180,9 @@ body::before {
 
 .skill-list li {
     padding: 10px 16px;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
     font-size: 0.95rem;
     color: #1e293b;
@@ -236,7 +238,9 @@ body::before {
 
 .pub-list li {
     padding: 0;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
 }
 
@@ -303,7 +307,9 @@ body::before {
 .tel-link {
     display: block;
     padding: 14px 42px;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
     text-decoration: none;
     color: inherit;
@@ -334,7 +340,7 @@ body::before {
 }
 
 .tel-link:hover {
-    background: #e2e8f0;
+    background: rgba(255, 255, 255, 0.8);
     transform: scale(1.04);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
@@ -366,7 +372,9 @@ body::before {
 .proj-link {
     display: block;
     padding: 14px 42px;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
     text-decoration: none;
     color: inherit;
@@ -397,7 +405,7 @@ body::before {
 }
 
 .proj-link:hover {
-    background: #e2e8f0;
+    background: rgba(255, 255, 255, 0.8);
     transform: scale(1.04);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
@@ -422,7 +430,9 @@ body::before {
 
 .award-list li {
     padding: 12px 18px;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 8px;
     font-size: 0.9rem;
 }
