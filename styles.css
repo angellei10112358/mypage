@@ -590,6 +590,10 @@ body::before {
         height: 190px;
     }
 
+    .scroll-container {
+        scroll-snap-type: y proximity;
+    }
+
     .section {
         min-height: 100vh;
         height: auto;
