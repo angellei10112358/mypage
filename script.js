@@ -264,71 +264,96 @@
         var items = container.querySelectorAll('.tag');
         if (items.length < 1) return;
 
-        var W, H, bubbles = [], highlighted = [];
+        var W, H, bubbles = [];
         var animId = null;
 
         items.forEach(function (el) {
             el.style.position = 'absolute';
             void el.offsetHeight;
+            var w = el.offsetWidth, h = el.offsetHeight;
             var hl = el.classList.contains('highlighted');
             var b = {
-                el: el,
-                homeX: 0, homeY: 0,
-                w: el.offsetWidth, h: el.offsetHeight,
+                el: el, homeX: 0, homeY: 0,
+                w: w, h: h, r: Math.max(w, h) / 2,
                 phaseX: Math.random() * 2 * Math.PI,
                 phaseY: Math.random() * 2 * Math.PI,
-                ampX: 3 + Math.random() * 5,
-                ampY: 2 + Math.random() * 4,
-                freqX: 0.5 + Math.random() * 0.4,
-                freqY: 0.6 + Math.random() * 0.5,
+                ampX: 2 + Math.random() * 3,
+                ampY: 2 + Math.random() * 3,
+                freqX: 0.4 + Math.random() * 0.3,
+                freqY: 0.5 + Math.random() * 0.3,
                 highlighted: hl
             };
             bubbles.push(b);
-            if (hl) highlighted.push(b);
         });
 
         function getSize() { W = container.clientWidth; H = container.clientHeight; }
-
-        function clampHome(b) {
-            b.homeX = Math.max(0, Math.min(W - b.w, b.homeX));
-            b.homeY = Math.max(0, Math.min(H - b.h, b.homeY));
-        }
 
         function initPositions() {
             getSize();
             if (W === 0 || H === 0) return;
             var cx = W / 2, cy = H / 2;
 
-            // Check if container is wide enough for radial layout
-            var ringInner = 30;
-            var ringOuter = (Math.min(W, H) * 0.35) - (highlighted.length > 0 ? 30 : 0);
-            if (ringOuter < ringInner) ringOuter = ringInner + 10;
+            var all = bubbles.slice();
+            // Largest first for stable packing
+            all.sort(function (a, b) { return b.r - a.r; });
 
-            highlighted.forEach(function (b, i) {
-                var a = (i / highlighted.length) * 2 * Math.PI;
-                var d = 5 + Math.random() * 15;
-                b.homeX = cx + Math.cos(a) * d - b.w / 2;
-                b.homeY = cy + Math.sin(a) * d - b.h / 2;
-                clampHome(b);
-            });
+            var placed = [];
 
-            var normal = bubbles.filter(function (b) { return !b.highlighted; });
-            normal.forEach(function (b, i) {
-                var a = (i / normal.length) * 2 * Math.PI + Math.random() * 0.3;
-                var d = ringInner + Math.random() * Math.max(0, ringOuter - ringInner);
-                b.homeX = cx + Math.cos(a) * d - b.w / 2;
-                b.homeY = cy + Math.sin(a) * d - b.h / 2;
-                clampHome(b);
+            all.forEach(function (b, idx) {
+                if (idx === 0) {
+                    b.homeX = cx - b.r;
+                    b.homeY = cy - b.r;
+                    placed.push(b);
+                    return;
+                }
+
+                var found = false;
+                var gap = 4;
+                var maxR = Math.min(W, H) * 0.5;
+
+                for (var ring = 0; ring < 200 && !found; ring++) {
+                    var radius = b.r + ring * 3;
+                    if (radius > maxR) break;
+                    var steps = Math.max(8, Math.ceil(radius * Math.PI / (b.r + gap)));
+                    for (var s = 0; s < steps && !found; s++) {
+                        var a = (s / steps) * 2 * Math.PI + Math.random() * 0.05;
+                        var x = cx + Math.cos(a) * radius - b.r;
+                        var y = cy + Math.sin(a) * radius - b.r;
+                        if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
+
+                        var ok = true;
+                        for (var p = 0; p < placed.length; p++) {
+                            var pb = placed[p];
+                            var dx = (x + b.r) - (pb.homeX + pb.r);
+                            var dy = (y + b.r) - (pb.homeY + pb.r);
+                            if (Math.sqrt(dx * dx + dy * dy) < b.r + pb.r + gap) {
+                                ok = false; break;
+                            }
+                        }
+                        if (ok) {
+                            b.homeX = x; b.homeY = y;
+                            placed.push(b); found = true;
+                        }
+                    }
+                }
+
+                if (!found) {
+                    var a = Math.random() * 2 * Math.PI;
+                    var d = 10 + Math.random() * maxR * 0.8;
+                    b.homeX = Math.max(0, Math.min(W - b.w, cx + Math.cos(a) * d - b.r));
+                    b.homeY = Math.max(0, Math.min(H - b.h, cy + Math.sin(a) * d - b.r));
+                    placed.push(b);
+                }
             });
         }
 
-        var startTime = Date.now();
+        initPositions();
 
+        var startTime = Date.now();
         function update() {
             getSize();
             if (W === 0 || H === 0) return;
             var t = (Date.now() - startTime) / 1000;
-
             bubbles.forEach(function (b) {
                 var x = b.homeX + Math.sin(t * b.freqX + b.phaseX) * b.ampX;
                 var y = b.homeY + Math.cos(t * b.freqY + b.phaseY) * b.ampY;
@@ -339,7 +364,6 @@
 
         function loop() { update(); animId = requestAnimationFrame(loop); }
 
-        initPositions();
         container.style.opacity = '1';
         loop();
 

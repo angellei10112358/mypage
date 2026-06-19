@@ -568,14 +568,15 @@ body::before {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 14px;
-    border-radius: 999px;
+    padding: 8px 14px;
+    aspect-ratio: 1;
+    border-radius: 50%;
     white-space: nowrap;
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     font-size: 0.75rem;
-    line-height: 1.4;
+    line-height: 1.2;
     color: #334155;
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
