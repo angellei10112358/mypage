@@ -620,7 +620,7 @@ body::before {
 }
 
 .tag[data-full]:hover .short {
-    display: none;
+    visibility: hidden;
 }
 
 .tag[data-full]:hover .full {

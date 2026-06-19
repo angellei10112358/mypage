@@ -293,34 +293,26 @@
             if (W === 0 || H === 0) return;
             var cx = W / 2, cy = H / 2;
 
-            var all = bubbles.slice();
-            // Largest first for stable packing
-            all.sort(function (a, b) { return b.r - a.r; });
+            var highlighted = bubbles.filter(function (b) { return b.highlighted; });
+            var normal = bubbles.filter(function (b) { return !b.highlighted; });
+
+            highlighted.sort(function (a, b) { return b.r - a.r; });
+            normal.sort(function (a, b) { return b.r - a.r; });
 
             var placed = [];
+            var gap = 4;
+            var maxR = Math.min(W, H) * 0.45;
 
-            all.forEach(function (b, idx) {
-                if (idx === 0) {
-                    b.homeX = cx - b.r;
-                    b.homeY = cy - b.r;
-                    placed.push(b);
-                    return;
-                }
-
-                var found = false;
-                var gap = 4;
-                var maxR = Math.min(W, H) * 0.5;
-
-                for (var ring = 0; ring < 200 && !found; ring++) {
-                    var radius = b.r + ring * 3;
+            function placeBubble(b, startRadius) {
+                for (var ring = 0; ring < 200; ring++) {
+                    var radius = startRadius + ring * 3;
                     if (radius > maxR) break;
                     var steps = Math.max(8, Math.ceil(radius * Math.PI / (b.r + gap)));
-                    for (var s = 0; s < steps && !found; s++) {
+                    for (var s = 0; s < steps; s++) {
                         var a = (s / steps) * 2 * Math.PI + Math.random() * 0.05;
                         var x = cx + Math.cos(a) * radius - b.r;
                         var y = cy + Math.sin(a) * radius - b.r;
                         if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
-
                         var ok = true;
                         for (var p = 0; p < placed.length; p++) {
                             var pb = placed[p];
@@ -330,16 +322,29 @@
                                 ok = false; break;
                             }
                         }
-                        if (ok) {
-                            b.homeX = x; b.homeY = y;
-                            placed.push(b); found = true;
-                        }
+                        if (ok) { b.homeX = x; b.homeY = y; placed.push(b); return true; }
                     }
                 }
+                return false;
+            }
 
-                if (!found) {
+            // Place highlighted at center
+            highlighted.forEach(function (b) {
+                if (placed.length === 0) {
+                    b.homeX = cx - b.r;
+                    b.homeY = cy - b.r;
+                    placed.push(b);
+                } else {
+                    placeBubble(b, 0);
+                }
+            });
+
+            // Place normal further out
+            var minStart = 30;
+            normal.forEach(function (b) {
+                if (!placeBubble(b, minStart)) {
                     var a = Math.random() * 2 * Math.PI;
-                    var d = 10 + Math.random() * maxR * 0.8;
+                    var d = minStart + Math.random() * maxR * 0.6;
                     b.homeX = Math.max(0, Math.min(W - b.w, cx + Math.cos(a) * d - b.r));
                     b.homeY = Math.max(0, Math.min(H - b.h, cy + Math.sin(a) * d - b.r));
                     placed.push(b);
