@@ -262,17 +262,25 @@
 
     function initBubblePhysics(container) {
         var items = container.querySelectorAll('.tag');
-        if (items.length < 2) return;
+        if (items.length < 1) return;
 
         var W, H, bubbles = [], highlighted = [];
-        var paused = false, animId = null;
+        var animId = null;
 
         items.forEach(function (el) {
+            el.style.position = 'absolute';
+            void el.offsetHeight;
             var hl = el.classList.contains('highlighted');
             var b = {
-                el: el, x: 0, y: 0, vx: 0, vy: 0,
+                el: el,
+                homeX: 0, homeY: 0,
                 w: el.offsetWidth, h: el.offsetHeight,
-                r: Math.max(el.offsetWidth, el.offsetHeight) / 2,
+                phaseX: Math.random() * 2 * Math.PI,
+                phaseY: Math.random() * 2 * Math.PI,
+                ampX: 3 + Math.random() * 5,
+                ampY: 2 + Math.random() * 4,
+                freqX: 0.5 + Math.random() * 0.4,
+                freqY: 0.6 + Math.random() * 0.5,
                 highlighted: hl
             };
             bubbles.push(b);
@@ -281,15 +289,9 @@
 
         function getSize() { W = container.clientWidth; H = container.clientHeight; }
 
-        function clamp(b) {
-            b.x = Math.max(0, Math.min(W - b.w, b.x || 0));
-            b.y = Math.max(0, Math.min(H - b.h, b.y || 0));
-        }
-
-        function dist(a, b) {
-            var ax = a.x + a.w / 2, ay = a.y + a.h / 2;
-            var bx = b.x + b.w / 2, by = b.y + b.h / 2;
-            return Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay));
+        function clampHome(b) {
+            b.homeX = Math.max(0, Math.min(W - b.w, b.homeX));
+            b.homeY = Math.max(0, Math.min(H - b.h, b.homeY));
         }
 
         function initPositions() {
@@ -297,94 +299,49 @@
             if (W === 0 || H === 0) return;
             var cx = W / 2, cy = H / 2;
 
+            // Check if container is wide enough for radial layout
+            var ringInner = 30;
+            var ringOuter = (Math.min(W, H) * 0.35) - (highlighted.length > 0 ? 30 : 0);
+            if (ringOuter < ringInner) ringOuter = ringInner + 10;
+
             highlighted.forEach(function (b, i) {
                 var a = (i / highlighted.length) * 2 * Math.PI;
                 var d = 5 + Math.random() * 15;
-                b.x = cx + Math.cos(a) * d - b.w / 2;
-                b.y = cy + Math.sin(a) * d - b.h / 2;
-                clamp(b);
-                b.vx = (Math.random() - 0.5) * 0.2;
-                b.vy = (Math.random() - 0.5) * 0.2;
+                b.homeX = cx + Math.cos(a) * d - b.w / 2;
+                b.homeY = cy + Math.sin(a) * d - b.h / 2;
+                clampHome(b);
             });
 
             var normal = bubbles.filter(function (b) { return !b.highlighted; });
-            var ringR = Math.min(W, H) * 0.2;
             normal.forEach(function (b, i) {
                 var a = (i / normal.length) * 2 * Math.PI + Math.random() * 0.3;
-                var d = 50 + Math.random() * ringR;
-                b.x = cx + Math.cos(a) * d - b.w / 2;
-                b.y = cy + Math.sin(a) * d - b.h / 2;
-                clamp(b);
-                b.vx = (Math.random() - 0.5) * 0.35;
-                b.vy = (Math.random() - 0.5) * 0.35;
+                var d = ringInner + Math.random() * Math.max(0, ringOuter - ringInner);
+                b.homeX = cx + Math.cos(a) * d - b.w / 2;
+                b.homeY = cy + Math.sin(a) * d - b.h / 2;
+                clampHome(b);
             });
         }
 
+        var startTime = Date.now();
+
         function update() {
-            if (paused) return;
             getSize();
             if (W === 0 || H === 0) return;
+            var t = (Date.now() - startTime) / 1000;
 
             bubbles.forEach(function (b) {
-                b.vx += (Math.random() - 0.5) * 0.04;
-                b.vy += (Math.random() - 0.5) * 0.04;
-                b.vx *= 0.985;
-                b.vy *= 0.985;
-
-                var limit = b.highlighted ? 0.25 : 0.45;
-                var spd = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
-                if (spd > limit) { b.vx = (b.vx / spd) * limit; b.vy = (b.vy / spd) * limit; }
-
-                if (b.highlighted) {
-                    b.vx += ((W / 2) - (b.x + b.w / 2)) * 0.003;
-                    b.vy += ((H / 2) - (b.y + b.h / 2)) * 0.003;
-                }
-
-                b.x += b.vx;
-                b.y += b.vy;
-                clamp(b);
-            });
-
-            for (var i = 0; i < bubbles.length; i++) {
-                for (var j = i + 1; j < bubbles.length; j++) {
-                    var a = bubbles[i], b = bubbles[j];
-                    var d = dist(a, b);
-                    var minD = (a.r + b.r) * 0.8;
-                    if (d < minD && d > 0.1) {
-                        var ov = minD - d;
-                        var ax = a.x + a.w / 2, ay = a.y + a.h / 2;
-                        var bx = b.x + b.w / 2, by = b.y + b.h / 2;
-                        var nx = (bx - ax) / d, ny = (by - ay) / d;
-                        a.x -= nx * ov * 0.5; a.y -= ny * ov * 0.5;
-                        b.x += nx * ov * 0.5; b.y += ny * ov * 0.5;
-                        var dvx = a.vx - b.vx, dvy = a.vy - b.vy;
-                        var dot = dvx * nx + dvy * ny;
-                        if (dot > 0) {
-                            a.vx -= dot * nx * 0.4; a.vy -= dot * ny * 0.4;
-                            b.vx += dot * nx * 0.4; b.vy += dot * ny * 0.4;
-                        }
-                        clamp(a); clamp(b);
-                    }
-                }
-            }
-
-            bubbles.forEach(function (b) {
-                b.el.style.left = Math.round(b.x) + 'px';
-                b.el.style.top = Math.round(b.y) + 'px';
+                var x = b.homeX + Math.sin(t * b.freqX + b.phaseX) * b.ampX;
+                var y = b.homeY + Math.cos(t * b.freqY + b.phaseY) * b.ampY;
+                b.el.style.left = Math.round(x) + 'px';
+                b.el.style.top = Math.round(y) + 'px';
             });
         }
 
         function loop() { update(); animId = requestAnimationFrame(loop); }
 
-        items.forEach(function (el) { el.style.position = 'absolute'; });
         initPositions();
         container.style.opacity = '1';
         loop();
-
-        container.addEventListener('mouseenter', function () { paused = true; });
-        container.addEventListener('mouseleave', function () { paused = false; });
-        container.addEventListener('touchstart', function () { paused = true; });
-        container.addEventListener('touchend', function () { paused = false; });
 
         var rt;
         window.addEventListener('resize', function () {
@@ -392,8 +349,8 @@
             rt = setTimeout(function () {
                 getSize();
                 bubbles.forEach(function (b) {
-                    b.x = Math.max(0, Math.min(W - b.w, b.x));
-                    b.y = Math.max(0, Math.min(H - b.h, b.y));
+                    b.homeX = Math.max(0, Math.min(W - b.w, b.homeX));
+                    b.homeY = Math.max(0, Math.min(H - b.h, b.homeY));
                 });
             }, 200);
         });

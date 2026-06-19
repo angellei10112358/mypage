@@ -565,24 +565,20 @@ body::before {
 }
 
 .tag {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100px;
-    height: 100px;
-    padding: 12px;
-    border-radius: 50%;
+    padding: 6px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    font-size: 0.7rem;
-    line-height: 1.2;
-    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1.4;
     color: #334155;
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    word-break: break-word;
-    hyphens: auto;
     cursor: default;
     box-sizing: border-box;
 }
@@ -633,11 +629,16 @@ body::before {
     justify-content: center;
     gap: 2px;
     position: absolute;
-    inset: 0;
-    padding: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    max-width: 90vw;
+    padding: 6px 14px;
     text-align: center;
     line-height: 1.25;
     font-size: 0.7rem;
+    pointer-events: none;
 }
 
 .parens {
