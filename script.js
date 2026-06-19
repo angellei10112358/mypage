@@ -364,7 +364,7 @@
         bubbles.forEach(function (b) {
             var t = b.el.textContent.trim();
             if (t === 'Vim') {
-                b.homeY += 35;
+                b.homeY += 15;
                 b.homeX -= 25;
                 b.homeX = Math.max(0, b.homeX);
                 b.homeY = Math.min(H - b.h, b.homeY);
