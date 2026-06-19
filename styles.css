@@ -606,27 +606,37 @@ body::before {
     overflow: visible;
 }
 
+.tag[data-full] .full {
+    display: none;
+}
+
 .tag[data-full]:hover {
-    color: transparent;
     transform: scale(1.2);
     z-index: 10;
 }
 
-.tag[data-full]:hover::after {
-    content: attr(data-full);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-    font-size: 0.7rem;
-    color: #334155;
-    text-align: center;
+.tag[data-full]:hover .short {
+    display: none;
 }
 
-.tag.highlighted[data-full]:hover::after {
-    color: #0f172a;
-    font-weight: 700;
+.tag[data-full]:hover .full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    text-align: center;
+    line-height: 1.25;
+    font-size: 0.7rem;
+}
+
+.parens {
+    font-size: 0.6rem;
+    opacity: 0.75;
+    line-height: 1.15;
 }
 
 /* ─── Responsive ─── */
