@@ -354,12 +354,12 @@
             }
         });
 
-        // Shift Vim bubble downward
+        // Shift individual bubbles
         bubbles.forEach(function (b) {
             var t = b.el.textContent.trim();
             if (t === 'Vim') {
-                b.homeY += 40;
-                b.homeY = Math.min(H - b.h, b.homeY);
+                b.homeY -= 25;
+                b.homeY = Math.max(0, b.homeY);
             } else if (t === 'AIPS') {
                 b.homeY += 30;
                 b.homeY = Math.min(H - b.h, b.homeY);
