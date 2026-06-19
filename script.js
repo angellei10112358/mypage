@@ -296,33 +296,35 @@
             var highlighted = bubbles.filter(function (b) { return b.highlighted; });
             var normal = bubbles.filter(function (b) { return !b.highlighted; });
 
-            highlighted.sort(function (a, b) { return b.r - a.r; });
-            normal.sort(function (a, b) { return b.r - a.r; });
-
             var placed = [];
-            var gap = 4;
-            var maxR = Math.min(W, H) * 0.45;
+            var gap = 8;
+            var maxR = Math.min(W, H) * 0.42;
 
-            function placeBubble(b, startRadius) {
-                for (var ring = 0; ring < 200; ring++) {
-                    var radius = startRadius + ring * 3;
+            function overlaps(x, y, r) {
+                for (var p = 0; p < placed.length; p++) {
+                    var pb = placed[p];
+                    var dx = (x + r) - (pb.homeX + pb.r);
+                    var dy = (y + r) - (pb.homeY + pb.r);
+                    if (Math.sqrt(dx * dx + dy * dy) < r + pb.r + gap) return true;
+                }
+                return false;
+            }
+
+            function placeAt(b, minRadius) {
+                for (var ring = 0; ring < 300; ring++) {
+                    var radius = minRadius + ring * 2;
                     if (radius > maxR) break;
-                    var steps = Math.max(8, Math.ceil(radius * Math.PI / (b.r + gap)));
+                    var steps = Math.max(12, Math.ceil(2 * Math.PI * radius / (b.r + gap)));
                     for (var s = 0; s < steps; s++) {
-                        var a = (s / steps) * 2 * Math.PI + Math.random() * 0.05;
+                        var a = (s / steps) * 2 * Math.PI;
                         var x = cx + Math.cos(a) * radius - b.r;
                         var y = cy + Math.sin(a) * radius - b.r;
                         if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
-                        var ok = true;
-                        for (var p = 0; p < placed.length; p++) {
-                            var pb = placed[p];
-                            var dx = (x + b.r) - (pb.homeX + pb.r);
-                            var dy = (y + b.r) - (pb.homeY + pb.r);
-                            if (Math.sqrt(dx * dx + dy * dy) < b.r + pb.r + gap) {
-                                ok = false; break;
-                            }
+                        if (!overlaps(x, y, b.r)) {
+                            b.homeX = x; b.homeY = y;
+                            placed.push(b);
+                            return true;
                         }
-                        if (ok) { b.homeX = x; b.homeY = y; placed.push(b); return true; }
                     }
                 }
                 return false;
@@ -335,16 +337,25 @@
                     b.homeY = cy - b.r;
                     placed.push(b);
                 } else {
-                    placeBubble(b, 0);
+                    placeAt(b, 0);
                 }
             });
 
-            // Place normal further out
-            var minStart = 30;
+            // Calculate highlighted cluster edge radius
+            var clusterR = 0;
+            highlighted.forEach(function (b) {
+                var dcx = b.homeX + b.r - cx;
+                var dcy = b.homeY + b.r - cy;
+                var edgeDist = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
+                if (edgeDist > clusterR) clusterR = edgeDist;
+            });
+
+            // Place normal outside the cluster
+            var minStart = clusterR + gap;
             normal.forEach(function (b) {
-                if (!placeBubble(b, minStart)) {
+                if (!placeAt(b, minStart)) {
                     var a = Math.random() * 2 * Math.PI;
-                    var d = minStart + Math.random() * maxR * 0.6;
+                    var d = minStart + Math.random() * (maxR - minStart) * 0.7;
                     b.homeX = Math.max(0, Math.min(W - b.w, cx + Math.cos(a) * d - b.r));
                     b.homeY = Math.max(0, Math.min(H - b.h, cy + Math.sin(a) * d - b.r));
                     placed.push(b);
