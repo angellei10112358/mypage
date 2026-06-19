@@ -770,6 +770,11 @@ body::before {
     min-height: 40px;
 }
 
+.edit-mode .tag {
+    cursor: move;
+    user-select: none;
+}
+
 .edit-move-btn {
     display: inline-flex;
     align-items: center;

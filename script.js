@@ -144,6 +144,93 @@
         document.body.appendChild(bar);
 
         exportBtn.addEventListener('click', exportContent);
+
+        document.querySelectorAll('.hobby-tags, .skill-tags').forEach(function (container) {
+            container.querySelectorAll('.tag').forEach(function (el) {
+                makeBubbleDraggable(el, container);
+            });
+        });
+
+        var exportPosBtn = document.createElement('button');
+        exportPosBtn.id = 'export-pos-btn';
+        exportPosBtn.textContent = 'Export Bubble Positions';
+        bar.appendChild(exportPosBtn);
+        exportPosBtn.addEventListener('click', exportBubblePositions);
+    }
+
+    function makeBubbleDraggable(el, container) {
+        var startX, startY, origX, origY;
+        el.addEventListener('mousedown', function (e) {
+            if (!editMode) return;
+            e.preventDefault();
+            startX = e.clientX;
+            startY = e.clientY;
+            origX = parseFloat(el.style.left) || 0;
+            origY = parseFloat(el.style.top) || 0;
+
+            function onMove(e) {
+                var dx = e.clientX - startX;
+                var dy = e.clientY - startY;
+                var newX = Math.max(0, Math.min(container.clientWidth - el.offsetWidth, origX + dx));
+                var newY = Math.max(0, Math.min(container.clientHeight - el.offsetHeight, origY + dy));
+                el.style.left = newX + 'px';
+                el.style.top = newY + 'px';
+            }
+
+            function onUp() {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                if (container._bubbles) {
+                    for (var i = 0; i < container._bubbles.length; i++) {
+                        var b = container._bubbles[i];
+                        if (b.el === el) {
+                            b.homeX = parseFloat(el.style.left) || 0;
+                            b.homeY = parseFloat(el.style.top) || 0;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        });
+    }
+
+    function exportBubblePositions() {
+        var data = {};
+        document.querySelectorAll('.hobby-tags, .skill-tags').forEach(function (container) {
+            var key = container.classList.contains('hobby-tags') ? 'hobbies' : 'other-skills';
+            var positions = [];
+            container.querySelectorAll('.tag').forEach(function (el) {
+                var full = el.getAttribute('data-full');
+                positions.push({
+                    text: el.textContent.trim(),
+                    full: full || null,
+                    left: parseInt(el.style.left) || 0,
+                    top: parseInt(el.style.top) || 0,
+                    width: el.offsetWidth,
+                    height: el.offsetHeight
+                });
+            });
+            data[key] = {
+                containerWidth: container.clientWidth,
+                containerHeight: container.clientHeight,
+                bubbles: positions
+            };
+        });
+        data._meta = { exportedAt: new Date().toISOString() };
+
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'bubble-positions.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     function addReorderButtons(el) {
@@ -380,6 +467,7 @@
         });
 
         container.style.opacity = '1';
+        container._bubbles = bubbles;
 
         var rt;
         window.addEventListener('resize', function () {
