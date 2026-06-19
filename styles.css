@@ -652,7 +652,10 @@ body::before {
 /* ─── Responsive ─── */
 
 @media (max-width: 768px) {
-    .hobby-tags,
+    .hobby-tags {
+        min-height: 780px;
+        max-width: 100%;
+    }
     .skill-tags {
         min-height: 975px;
         max-width: 100%;
