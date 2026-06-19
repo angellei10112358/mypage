@@ -607,6 +607,12 @@ body::before {
     overflow: visible;
 }
 
+.tag[data-full]::before,
+.tag[data-full]::after {
+    display: none !important;
+    content: none !important;
+}
+
 .tag[data-full] .full {
     display: none;
 }
