@@ -586,6 +586,42 @@ body::before {
     box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
 }
 
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tag[data-full] {
+    position: relative;
+}
+
+.tag[data-full]:hover {
+    color: transparent;
+    transform: scale(1.15);
+    z-index: 3;
+}
+
+.tag[data-full]:hover::after {
+    content: attr(data-full);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    text-align: center;
+    padding: 8px 16px;
+}
+
+.tag.highlighted[data-full]:hover::after {
+    color: #0f172a;
+    font-weight: 700;
+}
+
 /* ─── Responsive ─── */
 
 @media (max-width: 768px) {
