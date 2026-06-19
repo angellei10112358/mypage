@@ -356,8 +356,12 @@
 
         // Shift Vim bubble downward
         bubbles.forEach(function (b) {
-            if (b.el.textContent.trim() === 'Vim') {
+            var t = b.el.textContent.trim();
+            if (t === 'Vim') {
                 b.homeY += 40;
+                b.homeY = Math.min(H - b.h, b.homeY);
+            } else if (t === 'AIPS') {
+                b.homeY += 30;
                 b.homeY = Math.min(H - b.h, b.homeY);
             }
         });
