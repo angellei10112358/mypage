@@ -598,8 +598,8 @@ body::before {
     -webkit-backdrop-filter: blur(12px);
     font-weight: 700;
     color: #0f172a;
-    border-color: rgba(56, 189, 248, 0.5);
-    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+    border-color: rgba(186, 230, 253, 0.75);
+    box-shadow: 0 0 0 1px rgba(186, 230, 253, 0.3);
 }
 
 .tag[data-full] {
@@ -711,6 +711,14 @@ body::before {
     #publications .section-page {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (min-width: 769px) {
+    .hobby-tags,
+    .skill-tags {
+        height: 55vh;
+        min-height: 380px;
     }
 }
 
