@@ -347,6 +347,57 @@
 
     /* ─── Bubble Physics ─── */
 
+    var pcPositions = {
+  "other-skills": {
+    "containerWidth": 600,
+    "containerHeight": 500,
+    "bubbles": [
+      {"text": "Observation Proposal\n                        Observation Proposal(VLA, VLBA, ALMA, JWST, VLT/ERIS)", "full": null, "left": 225, "top": 175, "width": 151, "height": 151},
+      {"text": "Observation Scheduling\n                        Observation Scheduling(VLA & VLBA)", "full": null, "left": 330, "top": 298, "width": 164, "height": 164},
+      {"text": "Data Reduction\n                        Data Reduction(interferometer: radio & sub-mm)", "full": null, "left": 156, "top": 313, "width": 116, "height": 116},
+      {"text": "Lensing model\n                        Lensing model(galaxy & cluster)", "full": null, "left": 104, "top": 154, "width": 111, "height": 111},
+      {"text": "RadiativeTransferModel\n                        RadiativeTransferModel(myRadex)", "full": null, "left": 205, "top": 3, "width": 77, "height": 77},
+      {"text": "Astropy", "full": null, "left": 244, "top": 89, "width": 73, "height": 73},
+      {"text": "PyAutoLens", "full": null, "left": 361, "top": 118, "width": 96, "height": 96},
+      {"text": "LensTool", "full": null, "left": 396, "top": 30, "width": 75, "height": 75},
+      {"text": "3DBarolo", "full": null, "left": 488, "top": 261, "width": 80, "height": 80},
+      {"text": "CASA", "full": null, "left": 404, "top": 226, "width": 60, "height": 60},
+      {"text": "AIPS", "full": null, "left": 206, "top": 446, "width": 53, "height": 53},
+      {"text": "Carta", "full": null, "left": 77, "top": 99, "width": 57, "height": 57},
+      {"text": "DS9", "full": null, "left": 81, "top": 368, "width": 50, "height": 50},
+      {"text": "Python", "full": null, "left": 154, "top": 75, "width": 69, "height": 69},
+      {"text": "C++", "full": null, "left": 48, "top": 239, "width": 53, "height": 53},
+      {"text": "Linux", "full": null, "left": 96, "top": 285, "width": 60, "height": 60},
+      {"text": "Mac OS", "full": null, "left": 14, "top": 155, "width": 70, "height": 70},
+      {"text": "Windows", "full": null, "left": 5, "top": 309, "width": 78, "height": 78},
+      {"text": "Command line", "full": null, "left": 471, "top": 135, "width": 111, "height": 111},
+      {"text": "Vim", "full": null, "left": 123, "top": 426, "width": 50, "height": 50},
+      {"text": "LaTeX", "full": null, "left": 320, "top": 49, "width": 61, "height": 61},
+      {"text": "PPT", "full": null, "left": 276, "top": 406, "width": 51, "height": 51}
+    ]
+  },
+  "hobbies": {
+    "containerWidth": 600,
+    "containerHeight": 500,
+    "bubbles": [
+      {"text": "Detective fiction(shin honkaku)", "full": null, "left": 315, "top": 94, "width": 115, "height": 115},
+      {"text": "Vibe coding", "full": null, "left": 252, "top": 202, "width": 96, "height": 96},
+      {"text": "History", "full": null, "left": 351, "top": 261, "width": 71, "height": 71},
+      {"text": "Contemporarypolitics", "full": null, "left": 104, "top": 306, "width": 105, "height": 105},
+      {"text": "Animation", "full": null, "left": 131, "top": 114, "width": 84, "height": 84},
+      {"text": "Paleontology", "full": null, "left": 429, "top": 208, "width": 98, "height": 98},
+      {"text": "Psychology", "full": null, "left": 392, "top": 331, "width": 89, "height": 89},
+      {"text": "Light novel", "full": null, "left": 239, "top": 21, "width": 88, "height": 88},
+      {"text": "Private tracker", "full": null, "left": 37, "top": 174, "width": 105, "height": 105},
+      {"text": "Problem-solving", "full": null, "left": 227, "top": 312, "width": 122, "height": 122},
+      {"text": "AI agents", "full": null, "left": 155, "top": 209, "width": 82, "height": 82},
+      {"text": "Physics", "full": null, "left": 231, "top": 123, "width": 70, "height": 70},
+      {"text": "Chemistry", "full": null, "left": 442, "top": 84, "width": 82, "height": 82},
+      {"text": "Biology", "full": null, "left": 337, "top": 413, "width": 69, "height": 69}
+    ]
+  }
+};
+
     function initBubblePhysics(container) {
         var items = container.querySelectorAll('.tag');
         if (items.length < 1) return;
@@ -400,6 +451,43 @@
 
         var isMobile = window.innerWidth < 768;
         var gap = isMobile ? 10 : 14;
+
+        if (!isMobile) {
+            var key = container.classList.contains('hobby-tags') ? 'hobbies' : 'other-skills';
+            var saved = pcPositions[key];
+            if (saved && saved.bubbles) {
+                var matched = 0;
+                bubbles.forEach(function (b) {
+                    var bShort = (b.el.querySelector('.short') || b.el).textContent.trim().replace(/\s+/g, '');
+                    for (var i = 0; i < saved.bubbles.length; i++) {
+                        var sb = saved.bubbles[i];
+                        if (sb.text.split('\n')[0].trim().replace(/\s+/g, '') === bShort) {
+                            b.homeX = Math.max(0, Math.min(W - sb.width, sb.left));
+                            b.homeY = Math.max(0, Math.min(H - sb.height, sb.top));
+                            b.w = sb.width;
+                            b.h = sb.height;
+                            b.r = Math.max(sb.width, sb.height) / 2;
+                            if (Math.abs(b.el.offsetWidth - sb.width) > 1 || Math.abs(b.el.offsetHeight - sb.height) > 1) {
+                                b.el.style.width = sb.width + 'px';
+                                b.el.style.height = sb.height + 'px';
+                                b.el.style.lineHeight = sb.height + 'px';
+                            }
+                            matched++;
+                            break;
+                        }
+                    }
+                });
+                if (matched > 0) {
+                    bubbles.forEach(function (b) {
+                        b.el.style.left = Math.round(b.homeX) + 'px';
+                        b.el.style.top = Math.round(b.homeY) + 'px';
+                    });
+                    container.style.opacity = '1';
+                    container._bubbles = bubbles;
+                    return;
+                }
+            }
+        }
 
         var highlighted = bubbles.filter(function (b) { return b.highlighted; });
         var normal = bubbles.filter(function (b) { return !b.highlighted; });
