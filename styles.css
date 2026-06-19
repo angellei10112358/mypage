@@ -553,14 +553,15 @@ body::before {
 
 .hobby-tags,
 .skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    gap: 14px;
-    max-width: 400px;
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 42vh;
+    min-height: 260px;
+    overflow: hidden;
     margin: 0 auto;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .tag {
