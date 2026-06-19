@@ -297,8 +297,8 @@
             var normal = bubbles.filter(function (b) { return !b.highlighted; });
 
             var placed = [];
-            var gap = 8;
-            var maxR = Math.min(W, H) * 0.42;
+            var gap = 14;
+            var maxR = Math.min(W, H) * 0.46;
 
             function overlaps(x, y, r) {
                 for (var p = 0; p < placed.length; p++) {
@@ -311,12 +311,12 @@
             }
 
             function placeAt(b, minRadius) {
-                for (var ring = 0; ring < 300; ring++) {
-                    var radius = minRadius + ring * 2;
+                for (var ring = 0; ring < 500; ring++) {
+                    var radius = minRadius + ring * 3;
                     if (radius > maxR) break;
-                    var steps = Math.max(12, Math.ceil(2 * Math.PI * radius / (b.r + gap)));
+                    var steps = Math.max(16, Math.ceil(2 * Math.PI * radius / (b.r + gap)));
                     for (var s = 0; s < steps; s++) {
-                        var a = (s / steps) * 2 * Math.PI;
+                        var a = (s / steps) * 2 * Math.PI + ring * 0.01;
                         var x = cx + Math.cos(a) * radius - b.r;
                         var y = cy + Math.sin(a) * radius - b.r;
                         if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
@@ -341,24 +341,42 @@
                 }
             });
 
-            // Calculate highlighted cluster edge radius
+            // Calculate highlighted cluster bounding radius
             var clusterR = 0;
             highlighted.forEach(function (b) {
                 var dcx = b.homeX + b.r - cx;
                 var dcy = b.homeY + b.r - cy;
-                var edgeDist = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
-                if (edgeDist > clusterR) clusterR = edgeDist;
+                var edge = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
+                if (edge > clusterR) clusterR = edge;
             });
 
-            // Place normal outside the cluster
-            var minStart = clusterR + gap;
-            normal.forEach(function (b) {
-                if (!placeAt(b, minStart)) {
-                    var a = Math.random() * 2 * Math.PI;
-                    var d = minStart + Math.random() * (maxR - minStart) * 0.7;
-                    b.homeX = Math.max(0, Math.min(W - b.w, cx + Math.cos(a) * d - b.r));
-                    b.homeY = Math.max(0, Math.min(H - b.h, cy + Math.sin(a) * d - b.r));
+            // Place normal in concentric rings outside the cluster
+            var n = normal.length;
+            var rings = n <= 8 ? 1 : n <= 16 ? 2 : 3;
+            var maxRingR = maxR - gap;
+
+            normal.forEach(function (b, idx) {
+                var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
+                var countInRing = Math.ceil(n / rings);
+                var posInRing = idx % countInRing;
+                var ringR = clusterR + gap + b.r + ring * (gap * 3 + b.r * 2);
+                if (ringR > maxRingR) ringR = maxRingR;
+
+                // Distribute evenly within ring
+                var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
+                var x = cx + Math.cos(angle) * ringR - b.r;
+                var y = cy + Math.sin(angle) * ringR - b.r;
+
+                // Clamp inside container
+                x = Math.max(0, Math.min(W - b.w, x));
+                y = Math.max(0, Math.min(H - b.h, y));
+
+                // Check overlap with already placed; if overlaps, fallback to spiral
+                if (!overlaps(x, y, b.r)) {
+                    b.homeX = x; b.homeY = y;
                     placed.push(b);
+                } else {
+                    placeAt(b, ringR - gap);
                 }
             });
         }

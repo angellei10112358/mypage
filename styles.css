@@ -555,9 +555,9 @@ body::before {
 .skill-tags {
     position: relative;
     width: 100%;
-    max-width: 480px;
-    height: 42vh;
-    min-height: 260px;
+    max-width: 520px;
+    height: 50vh;
+    min-height: 320px;
     overflow: hidden;
     margin: 0 auto;
     opacity: 0;
@@ -719,8 +719,9 @@ body::before {
 @media (min-width: 769px) {
     .hobby-tags,
     .skill-tags {
-        height: 55vh;
-        min-height: 380px;
+        height: 72vh;
+        min-height: 500px;
+        max-width: 600px;
     }
 }
 
