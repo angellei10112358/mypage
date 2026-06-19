@@ -265,142 +265,104 @@
         if (items.length < 1) return;
 
         var W, H, bubbles = [];
-        var animId = null;
 
         items.forEach(function (el) {
             el.style.position = 'absolute';
             void el.offsetHeight;
             var w = el.offsetWidth, h = el.offsetHeight;
-            var hl = el.classList.contains('highlighted');
-            var b = {
-                el: el, homeX: 0, homeY: 0,
-                w: w, h: h, r: Math.max(w, h) / 2,
-                phaseX: Math.random() * 2 * Math.PI,
-                phaseY: Math.random() * 2 * Math.PI,
-                ampX: 2 + Math.random() * 3,
-                ampY: 2 + Math.random() * 3,
-                freqX: 0.4 + Math.random() * 0.3,
-                freqY: 0.5 + Math.random() * 0.3,
-                highlighted: hl
-            };
+            var b = { el: el, homeX: 0, homeY: 0, w: w, h: h, r: Math.max(w, h) / 2, highlighted: el.classList.contains('highlighted') };
             bubbles.push(b);
         });
 
         function getSize() { W = container.clientWidth; H = container.clientHeight; }
 
-        function initPositions() {
-            getSize();
-            if (W === 0 || H === 0) return;
-            var cx = W / 2, cy = H / 2;
-
-            var highlighted = bubbles.filter(function (b) { return b.highlighted; });
-            var normal = bubbles.filter(function (b) { return !b.highlighted; });
-
-            var placed = [];
-            var gap = 14;
-            var maxR = Math.min(W, H) * 0.46;
-
-            function overlaps(x, y, r) {
-                for (var p = 0; p < placed.length; p++) {
-                    var pb = placed[p];
-                    var dx = (x + r) - (pb.homeX + pb.r);
-                    var dy = (y + r) - (pb.homeY + pb.r);
-                    if (Math.sqrt(dx * dx + dy * dy) < r + pb.r + gap) return true;
-                }
-                return false;
+        function overlaps(x, y, r, placed) {
+            for (var p = 0; p < placed.length; p++) {
+                var pb = placed[p];
+                var dx = (x + r) - (pb.homeX + pb.r);
+                var dy = (y + r) - (pb.homeY + pb.r);
+                if (Math.sqrt(dx * dx + dy * dy) < r + pb.r + 14) return true;
             }
+            return false;
+        }
 
-            function placeAt(b, minRadius) {
-                for (var ring = 0; ring < 500; ring++) {
-                    var radius = minRadius + ring * 3;
-                    if (radius > maxR) break;
-                    var steps = Math.max(16, Math.ceil(2 * Math.PI * radius / (b.r + gap)));
-                    for (var s = 0; s < steps; s++) {
-                        var a = (s / steps) * 2 * Math.PI + ring * 0.01;
-                        var x = cx + Math.cos(a) * radius - b.r;
-                        var y = cy + Math.sin(a) * radius - b.r;
-                        if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
-                        if (!overlaps(x, y, b.r)) {
-                            b.homeX = x; b.homeY = y;
-                            placed.push(b);
-                            return true;
-                        }
+        function placeAt(b, minRadius, placed) {
+            var maxR = Math.min(W, H) * 0.46;
+            for (var ring = 0; ring < 500; ring++) {
+                var radius = minRadius + ring * 3;
+                if (radius > maxR) break;
+                var steps = Math.max(16, Math.ceil(2 * Math.PI * radius / (b.r + 14)));
+                for (var s = 0; s < steps; s++) {
+                    var a = (s / steps) * 2 * Math.PI + ring * 0.01;
+                    var x = cx + Math.cos(a) * radius - b.r;
+                    var y = cy + Math.sin(a) * radius - b.r;
+                    if (x < 0 || x > W - b.w || y < 0 || y > H - b.h) continue;
+                    if (!overlaps(x, y, b.r, placed)) {
+                        b.homeX = x; b.homeY = y;
+                        placed.push(b);
+                        return true;
                     }
                 }
-                return false;
             }
-
-            // Place highlighted at center
-            highlighted.forEach(function (b) {
-                if (placed.length === 0) {
-                    b.homeX = cx - b.r;
-                    b.homeY = cy - b.r;
-                    placed.push(b);
-                } else {
-                    placeAt(b, 0);
-                }
-            });
-
-            // Calculate highlighted cluster bounding radius
-            var clusterR = 0;
-            highlighted.forEach(function (b) {
-                var dcx = b.homeX + b.r - cx;
-                var dcy = b.homeY + b.r - cy;
-                var edge = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
-                if (edge > clusterR) clusterR = edge;
-            });
-
-            // Place normal in concentric rings outside the cluster
-            var n = normal.length;
-            var rings = n <= 8 ? 1 : n <= 16 ? 2 : 3;
-            var maxRingR = maxR - gap;
-
-            normal.forEach(function (b, idx) {
-                var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
-                var countInRing = Math.ceil(n / rings);
-                var posInRing = idx % countInRing;
-                var ringR = clusterR + gap + b.r + ring * (gap * 3 + b.r * 2);
-                if (ringR > maxRingR) ringR = maxRingR;
-
-                // Distribute evenly within ring
-                var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
-                var x = cx + Math.cos(angle) * ringR - b.r;
-                var y = cy + Math.sin(angle) * ringR - b.r;
-
-                // Clamp inside container
-                x = Math.max(0, Math.min(W - b.w, x));
-                y = Math.max(0, Math.min(H - b.h, y));
-
-                // Check overlap with already placed; if overlaps, fallback to spiral
-                if (!overlaps(x, y, b.r)) {
-                    b.homeX = x; b.homeY = y;
-                    placed.push(b);
-                } else {
-                    placeAt(b, ringR - gap);
-                }
-            });
+            return false;
         }
 
-        initPositions();
+        getSize();
+        if (W === 0 || H === 0) return;
+        var cx = W / 2, cy = H / 2;
 
-        var startTime = Date.now();
-        function update() {
-            getSize();
-            if (W === 0 || H === 0) return;
-            var t = (Date.now() - startTime) / 1000;
-            bubbles.forEach(function (b) {
-                var x = b.homeX + Math.sin(t * b.freqX + b.phaseX) * b.ampX;
-                var y = b.homeY + Math.cos(t * b.freqY + b.phaseY) * b.ampY;
-                b.el.style.left = Math.round(x) + 'px';
-                b.el.style.top = Math.round(y) + 'px';
-            });
-        }
+        var highlighted = bubbles.filter(function (b) { return b.highlighted; });
+        var normal = bubbles.filter(function (b) { return !b.highlighted; });
+        var placed = [];
 
-        function loop() { update(); animId = requestAnimationFrame(loop); }
+        // Place highlighted at center
+        highlighted.forEach(function (b) {
+            if (placed.length === 0) {
+                b.homeX = cx - b.r; b.homeY = cy - b.r;
+                placed.push(b);
+            } else {
+                placeAt(b, 0, placed);
+            }
+        });
+
+        // Cluster bounding radius
+        var clusterR = 0;
+        highlighted.forEach(function (b) {
+            var dcx = b.homeX + b.r - cx;
+            var dcy = b.homeY + b.r - cy;
+            var edge = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
+            if (edge > clusterR) clusterR = edge;
+        });
+
+        // Place normal in concentric rings
+        var n = normal.length;
+        var rings = n <= 8 ? 1 : n <= 16 ? 2 : 3;
+        normal.forEach(function (b, idx) {
+            var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
+            var countInRing = Math.ceil(n / rings);
+            var posInRing = idx % countInRing;
+            var ringR = clusterR + 14 + b.r + ring * (14 * 3 + b.r * 2);
+            if (ringR > Math.min(W, H) * 0.46 - 14) ringR = Math.min(W, H) * 0.46 - 14;
+            var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
+            var x = Math.max(0, Math.min(W - b.w, cx + Math.cos(angle) * ringR - b.r));
+            var y = Math.max(0, Math.min(H - b.h, cy + Math.sin(angle) * ringR - b.r));
+            if (!overlaps(x, y, b.r, placed)) {
+                b.homeX = x; b.homeY = y;
+                placed.push(b);
+            } else {
+                placeAt(b, ringR - 14, placed);
+            }
+        });
+
+        // Render positions once
+        bubbles.forEach(function (b) {
+            b.el.style.left = Math.round(b.homeX) + 'px';
+            b.el.style.top = Math.round(b.homeY) + 'px';
+        });
 
         container.style.opacity = '1';
-        loop();
 
+        // Re-clamp on resize
         var rt;
         window.addEventListener('resize', function () {
             clearTimeout(rt);
@@ -409,6 +371,8 @@
                 bubbles.forEach(function (b) {
                     b.homeX = Math.max(0, Math.min(W - b.w, b.homeX));
                     b.homeY = Math.max(0, Math.min(H - b.h, b.homeY));
+                    b.el.style.left = Math.round(b.homeX) + 'px';
+                    b.el.style.top = Math.round(b.homeY) + 'px';
                 });
             }, 200);
         });
