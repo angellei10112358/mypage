@@ -281,17 +281,17 @@
                 var pb = placed[p];
                 var dx = (x + r) - (pb.homeX + pb.r);
                 var dy = (y + r) - (pb.homeY + pb.r);
-                if (Math.sqrt(dx * dx + dy * dy) < r + pb.r + 14) return true;
+                if (Math.sqrt(dx * dx + dy * dy) < r + pb.r + gap) return true;
             }
             return false;
         }
 
         function placeAt(b, minRadius, placed) {
-            var maxR = isMobile ? H * 0.52 : Math.min(W, H) * 0.46;
+            var localMaxR = isMobile ? H * 0.55 : Math.min(W, H) * 0.55;
             for (var ring = 0; ring < 500; ring++) {
-                var radius = minRadius + ring * 3;
-                if (radius > maxR) break;
-                var steps = Math.max(16, Math.ceil(2 * Math.PI * radius / (b.r + 14)));
+                var radius = minRadius + ring * 2;
+                if (radius > localMaxR) break;
+                var steps = Math.max(12, Math.ceil(2 * Math.PI * radius / (b.r + gap)));
                 for (var s = 0; s < steps; s++) {
                     var a = (s / steps) * 2 * Math.PI + ring * 0.01;
                     var x = cx + Math.cos(a) * radius - b.r;
@@ -336,26 +336,31 @@
         });
 
         var n = normal.length;
-        var rings = isMobile ? Math.min(6, Math.ceil(n / 3)) : (n <= 8 ? 1 : n <= 16 ? 2 : 3);
-        var maxRingR = (isMobile ? H * 0.52 : Math.min(W, H) * 0.46) - gap;
+        var itemsPerRing = isMobile ? 5 : 6;
+        var rings = Math.max(1, Math.ceil(n / itemsPerRing));
+        var maxRadius = isMobile ? H * 0.50 : Math.min(W, H) * 0.50;
         normal.forEach(function (b, idx) {
             var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
             var countInRing = Math.ceil(n / rings);
             var posInRing = idx % countInRing;
-            var ringR = clusterR + gap + b.r + ring * (gap * 3 + b.r * 2);
-            if (ringR > maxRingR) ringR = maxRingR;
+            var ringR = clusterR + gap + b.r + ring * (gap + b.r * 2);
+            if (ringR > maxRadius - gap) {
+                placeAt(b, maxRadius * 0.4, placed);
+                return;
+            }
             var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
-            var x = Math.max(0, Math.min(W - b.w, cx + Math.cos(angle) * ringR - b.r));
-            var y = Math.max(0, Math.min(H - b.h, cy + Math.sin(angle) * ringR - b.r));
+            var x = cx + Math.cos(angle) * ringR - b.r;
+            var y = cy + Math.sin(angle) * ringR - b.r;
+            x = Math.max(0, Math.min(W - b.w, x));
+            y = Math.max(0, Math.min(H - b.h, y));
             if (!overlaps(x, y, b.r, placed)) {
                 b.homeX = x; b.homeY = y;
                 placed.push(b);
             } else {
-                placeAt(b, ringR - gap, placed);
+                placeAt(b, ringR, placed);
             }
         });
 
-        // Shift individual bubbles
         bubbles.forEach(function (b) {
             var t = b.el.textContent.trim();
             if (t === 'Vim') {
@@ -367,7 +372,6 @@
             }
         });
 
-        // Render positions once
         bubbles.forEach(function (b) {
             b.el.style.left = Math.round(b.homeX) + 'px';
             b.el.style.top = Math.round(b.homeY) + 'px';
@@ -375,7 +379,6 @@
 
         container.style.opacity = '1';
 
-        // Re-clamp on resize
         var rt;
         window.addEventListener('resize', function () {
             clearTimeout(rt);
