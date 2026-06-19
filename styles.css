@@ -654,7 +654,8 @@ body::before {
 @media (max-width: 768px) {
     .hobby-tags,
     .skill-tags {
-        min-height: 420px;
+        min-height: 650px;
+        max-width: 100%;
     }
     #navbar {
         padding: 0 8px;

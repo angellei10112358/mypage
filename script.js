@@ -287,7 +287,7 @@
         }
 
         function placeAt(b, minRadius, placed) {
-            var maxR = window.innerWidth < 768 ? H * 0.48 : Math.min(W, H) * 0.48;
+            var maxR = isMobile ? H * 0.52 : Math.min(W, H) * 0.46;
             for (var ring = 0; ring < 500; ring++) {
                 var radius = minRadius + ring * 3;
                 if (radius > maxR) break;
@@ -312,13 +312,12 @@
         var cx = W / 2, cy = H / 2;
 
         var isMobile = window.innerWidth < 768;
-        var gap = isMobile ? 12 : 14;
+        var gap = isMobile ? 10 : 14;
 
         var highlighted = bubbles.filter(function (b) { return b.highlighted; });
         var normal = bubbles.filter(function (b) { return !b.highlighted; });
         var placed = [];
 
-        // Place highlighted at center
         highlighted.forEach(function (b) {
             if (placed.length === 0) {
                 b.homeX = cx - b.r; b.homeY = cy - b.r;
@@ -328,7 +327,6 @@
             }
         });
 
-        // Cluster bounding radius
         var clusterR = 0;
         highlighted.forEach(function (b) {
             var dcx = b.homeX + b.r - cx;
@@ -337,10 +335,9 @@
             if (edge > clusterR) clusterR = edge;
         });
 
-        // Place normal in concentric rings
         var n = normal.length;
-        var rings = isMobile ? Math.min(5, Math.ceil(n / 4)) : (n <= 8 ? 1 : n <= 16 ? 2 : 3);
-        var maxRingR = (isMobile ? H : Math.min(W, H)) * 0.48 - gap;
+        var rings = isMobile ? Math.min(6, Math.ceil(n / 3)) : (n <= 8 ? 1 : n <= 16 ? 2 : 3);
+        var maxRingR = (isMobile ? H * 0.52 : Math.min(W, H) * 0.46) - gap;
         normal.forEach(function (b, idx) {
             var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
             var countInRing = Math.ceil(n / rings);
@@ -354,7 +351,7 @@
                 b.homeX = x; b.homeY = y;
                 placed.push(b);
             } else {
-                placeAt(b, ringR - 14, placed);
+                placeAt(b, ringR - gap, placed);
             }
         });
 
