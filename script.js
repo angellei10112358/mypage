@@ -287,7 +287,7 @@
         }
 
         function placeAt(b, minRadius, placed) {
-            var maxR = Math.min(W, H) * 0.46;
+            var maxR = Math.min(W, H) * 0.50;
             for (var ring = 0; ring < 500; ring++) {
                 var radius = minRadius + ring * 3;
                 if (radius > maxR) break;
@@ -337,12 +337,13 @@
         // Place normal in concentric rings
         var n = normal.length;
         var rings = n <= 8 ? 1 : n <= 16 ? 2 : 3;
-        normal.forEach(function (b, idx) {
-            var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
-            var countInRing = Math.ceil(n / rings);
-            var posInRing = idx % countInRing;
-            var ringR = clusterR + 14 + b.r + ring * (14 * 3 + b.r * 2);
-            if (ringR > Math.min(W, H) * 0.46 - 14) ringR = Math.min(W, H) * 0.46 - 14;
+            var maxRingR = Math.min(W, H) * 0.50 - 14;
+            normal.forEach(function (b, idx) {
+                var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
+                var countInRing = Math.ceil(n / rings);
+                var posInRing = idx % countInRing;
+                var ringR = clusterR + 14 + b.r + ring * (14 * 3 + b.r * 2);
+                if (ringR > maxRingR) ringR = maxRingR;
             var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
             var x = Math.max(0, Math.min(W - b.w, cx + Math.cos(angle) * ringR - b.r));
             var y = Math.max(0, Math.min(H - b.h, cy + Math.sin(angle) * ringR - b.r));

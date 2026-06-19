@@ -557,7 +557,7 @@ body::before {
     width: 100%;
     max-width: 520px;
     height: 50vh;
-    min-height: 320px;
+    min-height: 380px;
     overflow: hidden;
     margin: 0 auto;
     opacity: 0;
@@ -652,6 +652,11 @@ body::before {
 /* ─── Responsive ─── */
 
 @media (max-width: 768px) {
+    .hobby-tags,
+    .skill-tags {
+        min-height: 420px;
+        max-width: 100%;
+    }
     #navbar {
         padding: 0 8px;
         gap: 0;
