@@ -354,6 +354,14 @@
             }
         });
 
+        // Shift Vim bubble downward
+        bubbles.forEach(function (b) {
+            if (b.el.textContent.trim() === 'Vim') {
+                b.homeY += 40;
+                b.homeY = Math.min(H - b.h, b.homeY);
+            }
+        });
+
         // Render positions once
         bubbles.forEach(function (b) {
             b.el.style.left = Math.round(b.homeX) + 'px';

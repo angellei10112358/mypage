@@ -590,7 +590,7 @@ body::before {
 }
 
 .tag.highlighted {
-    background: rgba(186, 230, 253, 0.55);
+    background: rgba(186, 230, 253, 0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     font-weight: 700;
