@@ -364,8 +364,10 @@
         bubbles.forEach(function (b) {
             var t = b.el.textContent.trim();
             if (t === 'Vim') {
-                b.homeY -= 25;
-                b.homeY = Math.max(0, b.homeY);
+                b.homeY += 35;
+                b.homeX -= 25;
+                b.homeX = Math.max(0, b.homeX);
+                b.homeY = Math.min(H - b.h, b.homeY);
             } else if (t === 'AIPS') {
                 b.homeY += 30;
                 b.homeY = Math.min(H - b.h, b.homeY);
