@@ -551,20 +551,39 @@ body::before {
     color: #0f172a;
 }
 
-.hobby-list {
-    list-style: none;
+.hobby-tags {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
-.hobby-list li {
-    padding: 12px 18px;
-    background: rgba(255, 255, 255, 0.6);
+.tag {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: #334155;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tag:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.tag.highlighted {
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 8px;
-    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
 }
 
 /* ─── Responsive ─── */
