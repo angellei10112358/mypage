@@ -364,9 +364,6 @@
             } else if (t === 'AIPS') {
                 b.homeY += 30;
                 b.homeY = Math.min(H - b.h, b.homeY);
-            } else if (t === 'Mac OS') {
-                b.homeY -= 25;
-                b.homeY = Math.max(0, b.homeY);
             }
         });
 
