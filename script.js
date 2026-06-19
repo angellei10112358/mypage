@@ -491,63 +491,95 @@
 
         var highlighted = bubbles.filter(function (b) { return b.highlighted; });
         var normal = bubbles.filter(function (b) { return !b.highlighted; });
-        var placed = [];
 
-        highlighted.forEach(function (b) {
-            if (placed.length === 0) {
-                b.homeX = cx - b.r; b.homeY = cy - b.r;
-                placed.push(b);
-            } else {
-                placeAt(b, 0, placed);
-            }
-        });
+        if (isMobile) {
+            var all = highlighted.concat(normal);
+            var pad = 8, rowGap = 10;
+            var rows = [], curRow = [], curW = 0;
+            all.forEach(function (b) {
+                var need = b.w + (curRow.length > 0 ? rowGap : 0);
+                if (curW + need > W - pad * 2 && curRow.length > 0) {
+                    rows.push(curRow);
+                    curRow = [b]; curW = b.w;
+                } else {
+                    curRow.push(b); curW += need;
+                }
+            });
+            if (curRow.length > 0) rows.push(curRow);
 
-        var clusterR = 0;
-        highlighted.forEach(function (b) {
-            var dcx = b.homeX + b.r - cx;
-            var dcy = b.homeY + b.r - cy;
-            var edge = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
-            if (edge > clusterR) clusterR = edge;
-        });
+            var y = pad;
+            rows.forEach(function (row) {
+                var rowW = 0;
+                row.forEach(function (b) { rowW += b.w; });
+                rowW += (row.length - 1) * rowGap;
+                var x = (W - rowW) / 2;
+                var rowH = 0;
+                row.forEach(function (b) {
+                    b.homeX = Math.max(0, x);
+                    b.homeY = y;
+                    x += b.w + rowGap;
+                    if (b.h > rowH) rowH = b.h;
+                });
+                y += rowH + rowGap;
+            });
+        } else {
+            var placed = [];
+            highlighted.forEach(function (b) {
+                if (placed.length === 0) {
+                    b.homeX = cx - b.r; b.homeY = cy - b.r;
+                    placed.push(b);
+                } else {
+                    placeAt(b, 0, placed);
+                }
+            });
 
-        var n = normal.length;
-        var itemsPerRing = isMobile ? 5 : 6;
-        var rings = Math.max(1, Math.ceil(n / itemsPerRing));
-        var maxRadius = isMobile ? H * 0.50 : Math.min(W, H) * 0.50;
-        normal.forEach(function (b, idx) {
-            var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
-            var countInRing = Math.ceil(n / rings);
-            var posInRing = idx % countInRing;
-            var ringR = clusterR + gap + b.r + ring * (gap + b.r * 2);
-            if (ringR > maxRadius - gap) {
-                placeAt(b, maxRadius * 0.4, placed);
-                return;
-            }
-            var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
-            var x = cx + Math.cos(angle) * ringR - b.r;
-            var y = cy + Math.sin(angle) * ringR - b.r;
-            x = Math.max(0, Math.min(W - b.w, x));
-            y = Math.max(0, Math.min(H - b.h, y));
-            if (!overlaps(x, y, b.r, placed)) {
-                b.homeX = x; b.homeY = y;
-                placed.push(b);
-            } else {
-                placeAt(b, ringR, placed);
-            }
-        });
+            var clusterR = 0;
+            highlighted.forEach(function (b) {
+                var dcx = b.homeX + b.r - cx;
+                var dcy = b.homeY + b.r - cy;
+                var edge = Math.sqrt(dcx * dcx + dcy * dcy) + b.r;
+                if (edge > clusterR) clusterR = edge;
+            });
 
-        bubbles.forEach(function (b) {
-            var t = b.el.textContent.trim();
-            if (t === 'Vim') {
-                b.homeY += 15;
-                b.homeX -= 25;
-                b.homeX = Math.max(0, b.homeX);
-                b.homeY = Math.min(H - b.h, b.homeY);
-            } else if (t === 'AIPS') {
-                b.homeY += 30;
-                b.homeY = Math.min(H - b.h, b.homeY);
-            }
-        });
+            var n = normal.length;
+            var itemsPerRing = 6;
+            var rings = Math.max(1, Math.ceil(n / itemsPerRing));
+            var maxRadius = Math.min(W, H) * 0.50;
+            normal.forEach(function (b, idx) {
+                var ring = Math.min(rings - 1, Math.floor(idx / Math.ceil(n / rings)));
+                var countInRing = Math.ceil(n / rings);
+                var posInRing = idx % countInRing;
+                var ringR = clusterR + gap + b.r + ring * (gap + b.r * 2);
+                if (ringR > maxRadius - gap) {
+                    placeAt(b, maxRadius * 0.4, placed);
+                    return;
+                }
+                var angle = (posInRing / countInRing) * 2 * Math.PI + ring * 0.3;
+                var x = cx + Math.cos(angle) * ringR - b.r;
+                var y = cy + Math.sin(angle) * ringR - b.r;
+                x = Math.max(0, Math.min(W - b.w, x));
+                y = Math.max(0, Math.min(H - b.h, y));
+                if (!overlaps(x, y, b.r, placed)) {
+                    b.homeX = x; b.homeY = y;
+                    placed.push(b);
+                } else {
+                    placeAt(b, ringR, placed);
+                }
+            });
+
+            bubbles.forEach(function (b) {
+                var t = b.el.textContent.trim();
+                if (t === 'Vim') {
+                    b.homeY += 15;
+                    b.homeX -= 25;
+                    b.homeX = Math.max(0, b.homeX);
+                    b.homeY = Math.min(H - b.h, b.homeY);
+                } else if (t === 'AIPS') {
+                    b.homeY += 30;
+                    b.homeY = Math.min(H - b.h, b.homeY);
+                }
+            });
+        }
 
         bubbles.forEach(function (b) {
             b.el.style.left = Math.round(b.homeX) + 'px';
