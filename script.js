@@ -629,22 +629,23 @@
     if (hc) initBubblePhysics(hc);
     if (sc) initBubblePhysics(sc);
 
-    /* ─── Evidence Modal ─── */
+    /* ─── Evidence Modals ─── */
 
-    var evidenceBtn = document.querySelector('.evidence-btn');
-    var evidenceModal = document.getElementById('evidence-modal');
-    if (evidenceBtn && evidenceModal) {
-        evidenceBtn.addEventListener('click', function () {
-            evidenceModal.classList.add('active');
+    document.querySelectorAll('.evidence-btn').forEach(function (btn) {
+        var modalId = btn.getAttribute('data-modal');
+        var modal = document.getElementById(modalId);
+        if (!modal) return;
+        btn.addEventListener('click', function () {
+            modal.classList.add('active');
         });
-        evidenceModal.querySelector('.modal-close').addEventListener('click', function () {
-            evidenceModal.classList.remove('active');
+        modal.querySelector('.modal-close').addEventListener('click', function () {
+            modal.classList.remove('active');
         });
-        evidenceModal.addEventListener('click', function (e) {
-            if (e.target === evidenceModal) {
-                evidenceModal.classList.remove('active');
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
             }
         });
-    }
+    });
 
 })();
