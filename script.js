@@ -456,9 +456,11 @@
             var key = container.classList.contains('hobby-tags') ? 'hobbies' : 'other-skills';
             var saved = pcPositions[key];
             if (saved && saved.bubbles) {
-                var matched = 0;
+                var placed = [];
+                var unmatched = [];
                 bubbles.forEach(function (b) {
                     var bShort = (b.el.querySelector('.short') || b.el).textContent.trim().replace(/\s+/g, '');
+                    var found = false;
                     for (var i = 0; i < saved.bubbles.length; i++) {
                         var sb = saved.bubbles[i];
                         if (sb.text.split('\n')[0].trim().replace(/\s+/g, '') === bShort) {
@@ -472,12 +474,19 @@
                                 b.el.style.height = sb.height + 'px';
                                 b.el.style.lineHeight = sb.height + 'px';
                             }
-                            matched++;
+                            placed.push(b);
+                            found = true;
                             break;
                         }
                     }
+                    if (!found) unmatched.push(b);
                 });
-                if (matched > 0) {
+
+                unmatched.forEach(function (b) {
+                    placeAt(b, 0, placed);
+                });
+
+                if (placed.length > 0) {
                     bubbles.forEach(function (b) {
                         b.el.style.left = Math.round(b.homeX) + 'px';
                         b.el.style.top = Math.round(b.homeY) + 'px';
