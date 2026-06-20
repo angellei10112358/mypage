@@ -753,6 +753,10 @@ body::before {
         min-height: 500px;
         max-width: 600px;
     }
+
+    #publications .section-page {
+        overflow-y: auto;
+    }
 }
 
 /* ─── Edit Mode ─── */
