@@ -362,6 +362,13 @@ body::before {
     opacity: 1;
 }
 
+.pub-illus {
+    display: block;
+    margin: 8px auto 0;
+    max-width: 100%;
+    border-radius: 6px;
+}
+
 .more-coming {
     margin-top: 20px;
     padding: 20px 24px;
