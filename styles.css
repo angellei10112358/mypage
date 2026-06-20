@@ -529,6 +529,14 @@ body::before {
     color: #0f172a;
 }
 
+.proj-illus {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 6px;
+    margin-top: 8px;
+    display: block;
+}
+
 /* ─── Awards ─── */
 
 .award-list {
