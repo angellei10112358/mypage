@@ -756,6 +756,7 @@ body::before {
 
     #publications .section-page {
         overflow-y: auto;
+        align-items: flex-start;
     }
 }
 
