@@ -648,4 +648,23 @@
         });
     });
 
+    /* ─── Image Lightbox ─── */
+
+    var lightbox = document.getElementById('img-lightbox');
+    var lightboxImg = lightbox.querySelector('.lightbox-img');
+    document.querySelectorAll('.proj-illus').forEach(function (img) {
+        img.addEventListener('click', function () {
+            lightboxImg.src = this.src;
+            lightbox.classList.add('active');
+        });
+    });
+    lightbox.querySelector('.lightbox-close').addEventListener('click', function () {
+        lightbox.classList.remove('active');
+    });
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('active');
+        }
+    });
+
 })();
