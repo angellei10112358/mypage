@@ -912,13 +912,15 @@ body::before {
 }
 
 .modal-popup {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 12px;
     padding: 28px 24px 20px;
     max-width: 380px;
     width: 90%;
     position: relative;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
 }
 
 .modal-close {
@@ -964,4 +966,11 @@ a.evidence-card {
     color: #2563eb;
     font-weight: 500;
     cursor: pointer;
+}
+
+.evidence-footnote {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-top: 4px;
 }
