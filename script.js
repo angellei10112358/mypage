@@ -629,4 +629,22 @@
     if (hc) initBubblePhysics(hc);
     if (sc) initBubblePhysics(sc);
 
+    /* ─── Evidence Modal ─── */
+
+    var evidenceBtn = document.querySelector('.evidence-btn');
+    var evidenceModal = document.getElementById('evidence-modal');
+    if (evidenceBtn && evidenceModal) {
+        evidenceBtn.addEventListener('click', function () {
+            evidenceModal.classList.add('active');
+        });
+        evidenceModal.querySelector('.modal-close').addEventListener('click', function () {
+            evidenceModal.classList.remove('active');
+        });
+        evidenceModal.addEventListener('click', function (e) {
+            if (e.target === evidenceModal) {
+                evidenceModal.classList.remove('active');
+            }
+        });
+    }
+
 })();
