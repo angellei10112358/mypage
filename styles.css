@@ -538,9 +538,7 @@ body::before {
 
 .proj-illus {
     width: 100%;
-    max-width: 400px;
-    border-radius: 6px;
-    margin-top: 8px;
+    border-radius: 0 0 8px 8px;
     display: block;
 }
 
