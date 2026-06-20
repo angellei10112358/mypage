@@ -483,7 +483,13 @@
                 });
 
                 unmatched.forEach(function (b) {
-                    placeAt(b, 0, placed);
+                    if (!placeAt(b, 100, placed)) {
+                        if (!placeAt(b, 200, placed)) {
+                            b.homeX = Math.max(0, Math.min(W - b.w, Math.random() * W * 0.6));
+                            b.homeY = Math.max(0, Math.min(H - b.h, Math.random() * H * 0.6));
+                            placed.push(b);
+                        }
+                    }
                 });
 
                 if (placed.length > 0) {
