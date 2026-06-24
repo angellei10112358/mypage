@@ -163,7 +163,7 @@ body::before {
 
 .geek-tag {
     position: absolute;
-    bottom: 8px;
+    bottom: 4px;
     right: 12px;
     font-weight: 700;
     color: #dc2626;
