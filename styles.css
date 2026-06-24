@@ -128,6 +128,7 @@ body::before {
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
+    position: relative;
 }
 
 .section-content h2 {
@@ -157,6 +158,16 @@ body::before {
     display: flex;
     gap: 32px;
     align-items: flex-start;
+}
+
+.geek-tag {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-weight: 700;
+    color: #dc2626;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .info-grid {
