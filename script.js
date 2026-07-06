@@ -461,6 +461,8 @@
             var key = container.classList.contains('hobby-tags') ? 'hobbies' : 'other-skills';
             var saved = pcPositions[key];
             if (saved && saved.bubbles) {
+                var scaleX = W / saved.containerWidth;
+                var scaleY = H / saved.containerHeight;
                 var placed = [];
                 var unmatched = [];
                 bubbles.forEach(function (b) {
@@ -469,8 +471,8 @@
                     for (var i = 0; i < saved.bubbles.length; i++) {
                         var sb = saved.bubbles[i];
                         if (sb.text.split('\n')[0].trim().replace(/\s+/g, '') === bShort) {
-                            b.homeX = Math.max(0, Math.min(W - sb.width, sb.left));
-                            b.homeY = Math.max(0, Math.min(H - sb.height, sb.top));
+                            b.homeX = Math.max(0, Math.min(W - sb.width, Math.round(sb.left * scaleX)));
+                            b.homeY = Math.max(0, Math.min(H - sb.height, Math.round(sb.top * scaleY)));
                             b.w = sb.width;
                             b.h = sb.height;
                             b.r = Math.max(sb.width, sb.height) / 2;

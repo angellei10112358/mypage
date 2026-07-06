@@ -761,7 +761,16 @@ body::before {
     .skill-tags {
         height: 72vh;
         min-height: 500px;
+    }
+    .hobby-tags {
         max-width: 600px;
+    }
+    .skill-tags {
+        max-width: 100%;
+    }
+
+    #other-skills .section-content {
+        max-width: 100%;
     }
 
     #publications .section-page {
