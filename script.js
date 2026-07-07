@@ -388,21 +388,21 @@
     "containerWidth": 600,
     "containerHeight": 532,
     "bubbles": [
-      {"text": "Detective fiction(shin honkaku)", "full": null, "left": 315, "top": 93, "width": 116, "height": 116},
-      {"text": "Vibe coding", "full": null, "left": 252, "top": 200, "width": 97, "height": 97},
-      {"text": "History", "full": null, "left": 351, "top": 258, "width": 72, "height": 72},
+      {"text": "Detective fiction(shin honkaku)", "full": null, "left": 22, "top": 185, "width": 116, "height": 116},
+      {"text": "Vibe coding", "full": null, "left": 225, "top": 337, "width": 97, "height": 97},
+      {"text": "History", "full": null, "left": 368, "top": 222, "width": 72, "height": 72},
       {"text": "Contemporarypolitics", "full": null, "left": 104, "top": 303, "width": 106, "height": 106},
       {"text": "Animation", "full": null, "left": 131, "top": 113, "width": 85, "height": 85},
-      {"text": "Paleontology", "full": null, "left": 429, "top": 206, "width": 99, "height": 99},
-      {"text": "Psychology", "full": null, "left": 392, "top": 327, "width": 90, "height": 90},
-      {"text": "Light novel", "full": null, "left": 239, "top": 21, "width": 89, "height": 89},
-      {"text": "Private tracker", "full": null, "left": 37, "top": 172, "width": 106, "height": 106},
-      {"text": "Problem-solving", "full": null, "left": 227, "top": 309, "width": 123, "height": 123},
+      {"text": "Paleontology", "full": null, "left": 457, "top": 220, "width": 99, "height": 99},
+      {"text": "Psychology", "full": null, "left": 341, "top": 304, "width": 90, "height": 90},
+      {"text": "Light novel", "full": null, "left": 353, "top": 22, "width": 89, "height": 89},
+      {"text": "Private tracker", "full": null, "left": 180, "top": 10, "width": 106, "height": 106},
+      {"text": "Problem-solving", "full": null, "left": 240, "top": 201, "width": 123, "height": 123},
       {"text": "AI agents", "full": null, "left": 155, "top": 207, "width": 83, "height": 83},
       {"text": "Physics", "full": null, "left": 231, "top": 122, "width": 71, "height": 71},
-      {"text": "Complex Systems", "full": null, "left": 310, "top": 120, "width": 90, "height": 90},
+      {"text": "Complex Systems", "full": null, "left": 310, "top": 120, "width": 129, "height": 90},
       {"text": "Chemistry", "full": null, "left": 442, "top": 83, "width": 83, "height": 83},
-      {"text": "Biology", "full": null, "left": 337, "top": 408, "width": 70, "height": 70}
+      {"text": "Biology", "full": null, "left": 457, "top": 327, "width": 70, "height": 70}
     ]
   }
 };
