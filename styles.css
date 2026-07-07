@@ -181,12 +181,13 @@ body::before {
 }
 
 .email-box {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 12px;
     padding: 8px 14px;
-    display: inline-block;
+    width: 40%;
+    justify-self: start;
 }
 
 .info-grid a {
