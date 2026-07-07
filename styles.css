@@ -186,7 +186,6 @@ body::before {
     -webkit-backdrop-filter: blur(8px);
     border-radius: 12px;
     padding: 8px 14px;
-    width: 40%;
     justify-self: start;
 }
 
@@ -777,6 +776,10 @@ body::before {
     }
     .skill-tags {
         max-width: 100%;
+    }
+
+    .email-box {
+        width: 40%;
     }
 
     #other-skills .section-content {
