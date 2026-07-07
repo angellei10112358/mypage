@@ -748,8 +748,6 @@ body::before {
 
     .section {
         padding: 70px 16px 40px;
-        height: auto;
-        min-height: 100vh;
     }
 
     .section-page {
