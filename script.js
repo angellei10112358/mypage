@@ -400,6 +400,7 @@
       {"text": "Problem-solving", "full": null, "left": 227, "top": 309, "width": 123, "height": 123},
       {"text": "AI agents", "full": null, "left": 155, "top": 207, "width": 83, "height": 83},
       {"text": "Physics", "full": null, "left": 231, "top": 122, "width": 71, "height": 71},
+      {"text": "Complex Systems", "full": null, "left": 310, "top": 120, "width": 90, "height": 90},
       {"text": "Chemistry", "full": null, "left": 442, "top": 83, "width": 83, "height": 83},
       {"text": "Biology", "full": null, "left": 337, "top": 408, "width": 70, "height": 70}
     ]
