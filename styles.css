@@ -764,6 +764,10 @@ body::before {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
+
+    #personal-projects {
+        height: 150vh;
+    }
 }
 
 @media (min-width: 769px) {
