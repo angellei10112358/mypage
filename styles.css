@@ -795,6 +795,15 @@ body::before {
         overflow-y: auto;
         align-items: flex-start;
     }
+
+    #personal-projects {
+        height: 150vh;
+    }
+
+    #personal-projects .section-page {
+        overflow-y: auto;
+        align-items: flex-start;
+    }
 }
 
 /* ─── Edit Mode ─── */
