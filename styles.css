@@ -765,8 +765,9 @@ body::before {
         -webkit-overflow-scrolling: touch;
     }
 
-    #personal-projects {
-        height: 150vh;
+    #personal-projects .section-page {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
@@ -794,10 +795,6 @@ body::before {
     #publications .section-page {
         overflow-y: auto;
         align-items: flex-start;
-    }
-
-    #personal-projects {
-        height: 150vh;
     }
 
     #personal-projects .section-page {
